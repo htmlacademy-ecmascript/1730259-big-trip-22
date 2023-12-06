@@ -16,7 +16,6 @@ module.exports = {
     }),
 
     new CopyPlugin({
-      patterns: [{ from: 'public' }],
       patterns: [
         {
           from: 'public',
@@ -38,6 +37,10 @@ module.exports = {
             presets: ['@babel/preset-env']
           },
         },
+      },
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader']
       },
     ]
   }
