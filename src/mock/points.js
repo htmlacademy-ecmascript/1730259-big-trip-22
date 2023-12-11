@@ -1,4 +1,3 @@
-import { POINTS_TYPE } from '../const';
 import { getRandomArrayElement, getRandomNumber } from '../utils';
 
 const mockPoints = [
@@ -10,13 +9,13 @@ const mockPoints = [
     'destination': '8d918a87-177b-4333-bcda-670dab018496',
     'isFavorite': !!getRandomNumber(1),
     'offers': [
-      '31d88692-7348-48b6-9893-e2dccaa54aa4',
-      '79e19e9d-5300-4066-b24d-d1aec1fb0ff3',
-      'cedd58ff-fcb5-4a23-b817-c213d2431193',
-      '03b1e689-4055-4e29-a441-13cdbc539776',
-      '1c05bdff-b89f-418a-a3f2-4c7a153e09c8'
+      '58f27849-c4f9-42e5-88ab-48267d282369',
+      '5df4f3e4-f677-4318-a3f5-458b16f30969',
+      'cde29377-f0d4-4626-949a-ab5709a2ad55',
+      '009ed2cd-714f-4ce2-aae1-7e85683eeedf',
+      'effb2e14-3447-497b-a5bb-113083704bbd'
     ],
-    'type': getRandomArrayElement(POINTS_TYPE),
+    'type': 'taxi',
   },
   {
     'id': 'c5aa3f40-f37a-4165-a2be-1d14d921b96c',
@@ -26,11 +25,11 @@ const mockPoints = [
     'destination': 'fd9d7a4c-fb5a-4fd5-95e4-d50deb29f50f',
     'isFavorite': !!getRandomNumber(1),
     'offers': [
-      '334b810d-4eb2-4534-85fc-f5124d7ed8de',
-      '7cec6f24-4a2a-4fdf-a347-5c44947f0320',
-      'e566d6ed-8eee-47f2-a14e-2b5eb753b54e'
+      'cafbbdd8-6dea-432f-bb37-f6b8ae635ae4',
+      'b371fb66-c631-4bca-b1f8-f80f48692674',
+      'bbc01c4e-2318-426b-bfef-6af93548e45c'
     ],
-    'type': getRandomArrayElement(POINTS_TYPE),
+    'type': 'bus',
   },
   {
     'id': 'cd36dec2-a391-47c5-b938-6b7db8f3b4d0',
@@ -40,9 +39,9 @@ const mockPoints = [
     'destination': '8d918a87-177b-4333-bcda-670dab018496',
     'isFavorite': !!getRandomNumber(1),
     'offers': [
-      'ef578c3e-7235-488a-be62-4949e2daa9dd'
+      '055ba681-0802-460d-8b60-9d222286bd59'
     ],
-    'type': getRandomArrayElement(POINTS_TYPE),
+    'type': 'ship',
   },
   {
     'id': '7de4a7d9-6b82-4dfc-9457-5b0080e0d212',
@@ -52,7 +51,7 @@ const mockPoints = [
     'destination': '8d918a87-177b-4333-bcda-670dab018496',
     'isFavorite': !!getRandomNumber(1),
     'offers': [],
-    'type': getRandomArrayElement(POINTS_TYPE),
+    'type': 'sightseeing',
   },
 ];
 

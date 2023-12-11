@@ -18,8 +18,12 @@ export default class BoardPresenter {
     this.boardPoint = [...this.pointModel.getPoint()];
     render(this.sortListView, this.boardContainer);
     render(this.weapointListView, this.boardContainer);
-    render(new EditPointView(), this.weapointListView.getElement());
-    for (let i = 0; i < this.boardPoint.length; i++) {
+    render(new EditPointView({
+      point: this.boardPoint[0],
+      offers: [...this.pointModel.getOfferById(this.boardPoint[0].type, this.boardPoint[0].offers)],
+      destination: this.pointModel.getDestinationById(this.boardPoint[0].destination)
+    }), this.weapointListView.getElement());
+    for (let i = 1; i < this.boardPoint.length; i++) {
       render(new WaypointView({
         point: this.boardPoint[i],
         offers: [...this.pointModel.getOfferById(this.boardPoint[i].type, this.boardPoint[i].offers)],

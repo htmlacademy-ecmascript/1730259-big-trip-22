@@ -20,7 +20,7 @@ function createWaypointTemplate(point, offers, destination) {
     `
       <li class="trip-events__item">
         <div class="event">
-          <time class="event__date" datetime=${humanizeTaskDueDate(dateFrom, DATE_FORMAT.full)}>${humanizeTaskDueDate(dateFrom, DATE_FORMAT.monthDay)}</time>
+          <time class="event__date" datetime=${humanizeTaskDueDate(dateFrom, DATE_FORMAT.yearMonthDay)}>${humanizeTaskDueDate(dateFrom, DATE_FORMAT.monthDay)}</time>
           <div class="event__type">
             <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
           </div>

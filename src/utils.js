@@ -32,4 +32,6 @@ function getDifferenceInTime(start, end) {
   }
 }
 
+export const capitalize = (item) => item.charAt(0).toUpperCase() + item.substring(1);
+
 export {getRandomArrayElement, getRandomNumber, humanizeTaskDueDate, getDifferenceInTime};
