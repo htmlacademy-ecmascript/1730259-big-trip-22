@@ -10,6 +10,7 @@ export const DATE_FORMAT = {
   full: 'DD/MM/YY[&nbsp;]HH:mm',
   yearMonthDay: 'YYYY-MM-D',
   monthDay: 'MMM D',
+  dayMonth: 'D MMM',
   hours: 'HH:mm'
 };
 

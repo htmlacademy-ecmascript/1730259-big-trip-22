@@ -44,10 +44,19 @@ export const getDestinationNames = (destinations, points = undefined) => {
   return [...new Set(destinations.map((destination) => destination.name))];
 };
 
-export const getMinData = (items) => humanizeTaskDueDate(dayjs.min(items.map((item) => dayjs(item.dateFrom))), DATE_FORMAT.monthDay);
+export const getMinData = (items) => humanizeTaskDueDate(dayjs.min(items.map((item) => dayjs(item.dateFrom))), DATE_FORMAT.dayMonth);
 
-export const getMaxData = (items) => humanizeTaskDueDate(dayjs.max(items.map((item) => dayjs(item.dateTo))), DATE_FORMAT.monthDay);
+export const getMaxData = (items) => humanizeTaskDueDate(dayjs.max(items.map((item) => dayjs(item.dateTo))), DATE_FORMAT.dayMonth);
 
 export const capitalize = (item) => item.charAt(0).toUpperCase() + item.substring(1);
+
+export const getFullPrice = (points , offers) => {
+  const baseFullPrice = points.map((point) => point.basePrice).reduce((accumulator, value) => accumulator + value, 0);
+  const offerPoints = points.map((point) => point.offers).flat(Infinity);
+  const newOffers = offers.map((offer) => offer.offers).flat().filter((item) => offerPoints.find((offer) => offer === item.id)).map((item) => item.price).reduce((accumulator, value) => accumulator + value, 0);
+
+  return baseFullPrice + newOffers;
+};
+
 
 export {getRandomArrayElement, getRandomNumber, humanizeTaskDueDate, getDifferenceInTime};

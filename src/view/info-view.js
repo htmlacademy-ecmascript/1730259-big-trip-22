@@ -1,7 +1,7 @@
 import {createElement} from '../render.js';
-import { getDestinationNames, getMaxData, getMinData } from '../utils.js';
+import { getDestinationNames, getFullPrice, getMaxData, getMinData } from '../utils.js';
 
-function createInfoTemplate(points, destinations) {
+function createInfoTemplate(points, offers, destinations) {
   function createTitle() {
     const filterPointsByNames = getDestinationNames(destinations, points);
 
@@ -21,20 +21,21 @@ function createInfoTemplate(points, destinations) {
         </div>
 
         <p class="trip-info__cost">
-          Total: &euro;&nbsp;<span class="trip-info__cost-value">1230</span>
+          Total: &euro;&nbsp;<span class="trip-info__cost-value">${getFullPrice(points, offers)}</span>
         </p>
       </section>`
   );
 }
 
 export default class InfoView {
-  constructor({points, destinations}) {
+  constructor({points, offers, destinations}) {
     this.points = points;
+    this.offers = offers;
     this.destinations = destinations;
   }
 
   getTemplate() {
-    return createInfoTemplate(this.points, this.destinations);
+    return createInfoTemplate(this.points, this.offers, this.destinations);
   }
 
   getElement() {

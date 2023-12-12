@@ -10,6 +10,7 @@ export default class InfoPresenter {
   init() {
     render(new InfoView({
       points: this.pointModel.getPoint(),
+      offers: this.pointModel.getOffer(),
       destinations: this.pointModel.getDestination(),
     }), this.infoContainer, RenderPosition.AFTERBEGIN);
   }
