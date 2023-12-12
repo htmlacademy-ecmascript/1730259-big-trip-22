@@ -11,25 +11,9 @@ function createTypeTemplate(type) {
   );
 }
 
-function createOfferListTemplate(offers) {
-  if (offers.length !== 0) {
-    return (
-      `<section class="event__section  event__section--offers">
-        <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
-        <div class="event__available-offers">
-          ${offers.map((offer) => createOfferTemplate(offer)).join('')}
-        </div>
-      </section>`
-    );
-  }
-
-  return '';
-}
-
-function createOfferTemplate(offers, checkedOffers = []) {
-  const {id, title, price} = offers;
-  const isChecked = checkedOffers.includes(id) ? 'checked' : '';
+function createOfferTemplate(offer, checkedOffers) {
+  const {id, title, price} = offer;
+  const isChecked = checkedOffers.map((item) => item.id).includes(id) ? 'checked' : '';
 
   return (
     `<div class="event__offer-selector">
@@ -41,6 +25,22 @@ function createOfferTemplate(offers, checkedOffers = []) {
       </label>
     </div>`
   );
+}
+
+function createOfferListTemplate({offers}, checkedOffers) {
+  if (offers.length !== 0) {
+    return (
+      `<section class="event__section  event__section--offers">
+        <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+
+        <div class="event__available-offers">
+          ${offers.map((offer) => createOfferTemplate(offer, checkedOffers)).join('')}
+        </div>
+      </section>`
+    );
+  }
+
+  return '';
 }
 
 function createPhotoTemplate(photo) {
@@ -79,7 +79,7 @@ function createDestinationTemplate(destination) {
   return '';
 }
 
-function createEditPointTemplate(point, offers, destination) {
+function createEditPointTemplate(point, offers, checkedOffers, destination) {
   const { type, dateFrom, dateTo, basePrice } = point;
   const { name } = destination;
 
@@ -139,7 +139,7 @@ function createEditPointTemplate(point, offers, destination) {
             </button>
           </header>
           <section class="event__details">
-            ${createOfferListTemplate(offers)}
+            ${createOfferListTemplate(offers, checkedOffers)}
             ${createDestinationTemplate(destination)}
           </section>
         </form>
@@ -149,14 +149,15 @@ function createEditPointTemplate(point, offers, destination) {
 }
 
 export default class EditPointView {
-  constructor({point, offers, destination}) {
+  constructor({point, offers, checkedOffers, destination}) {
     this.point = point;
     this.offers = offers;
+    this.checkedOffers = checkedOffers;
     this.destination = destination;
   }
 
   getTemplate() {
-    return createEditPointTemplate(this.point, this.offers, this.destination);
+    return createEditPointTemplate(this.point, this.offers, this.checkedOffers, this.destination);
   }
 
   getElement() {

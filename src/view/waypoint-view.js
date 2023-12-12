@@ -16,12 +16,6 @@ function createWaypointTemplate(point, offers, destination) {
   const { type, dateFrom, dateTo, isFavorite, basePrice } = point;
   const { name } = destination;
 
-  // const handleChangeClass = () => {
-  //   console.log('nen');
-
-  //   // this.target.classList.toggle('event__favorite-btn--active');
-  // };
-
   return (
     `
       <li class="trip-events__item">
