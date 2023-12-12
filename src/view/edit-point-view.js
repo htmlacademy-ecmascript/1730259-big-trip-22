@@ -22,9 +22,9 @@ function createOfferListTemplate(offers) {
         </div>
       </section>`
     );
-  } else {
-    return '';
   }
+
+  return '';
 }
 
 function createOfferTemplate(offers, checkedOffers = []) {
@@ -43,15 +43,40 @@ function createOfferTemplate(offers, checkedOffers = []) {
   );
 }
 
-function createDestinationTemplate(destination) {
-  const { description } = destination;
+function createPhotoTemplate(photo) {
+  const {src, description} = photo;
+  return (`<img class="event__photo" src=${src} alt=${description}>`);
+}
 
-  return (
-    `<section class="event__section  event__section--destination">
-      <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-      <p class="event__destination-description">${description}</p>
-    </section>`
-  );
+function createPhotoContainerTemplate(pictures) {
+  if (pictures.length > 0) {
+    return (
+      `<div class="event__photos-container">
+        <div class="event__photos-tape">
+          ${pictures.map((item) => createPhotoTemplate(item)).join('')}
+        </div>
+      </div>`
+    );
+  }
+
+  return '';
+}
+
+function createDestinationTemplate(destination) {
+  const { description, pictures } = destination;
+
+  if (description > 0 || pictures.length > 0) {
+    return (
+      `<section class="event__section  event__section--destination">
+        <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+        <p class="event__destination-description">${description}</p>
+
+        ${createPhotoContainerTemplate(pictures)}
+      </section>`
+    );
+  }
+
+  return '';
 }
 
 function createEditPointTemplate(point, offers, destination) {
