@@ -10,9 +10,13 @@ const headerFilterElement = header.querySelector('.trip-controls__filters');
 const main = document.querySelector('.page-main');
 const containerElement = main.querySelector('.trip-events');
 
-const infoPresenter = new InfoPresenter({infoContainer: infoHeader});
-const filterPresenter = new FilterPresenter({filterConteiner: headerFilterElement});
+
 const pointModel = new PointModel();
+const infoPresenter = new InfoPresenter({
+  infoContainer: infoHeader,
+  pointModel
+});
+const filterPresenter = new FilterPresenter({filterConteiner: headerFilterElement});
 const boardPresenter = new BoardPresenter({
   boardContainer: containerElement,
   pointModel
