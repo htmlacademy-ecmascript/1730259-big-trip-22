@@ -52,20 +52,20 @@ export const mockDestinations = [
   },
   {
     id: '8d918a87-177b-4333-bcda-670dab018496',
-    description: 'Chamonix - with an embankment of a mighty river as a centre of attraction',
+    description: '',
     name: 'Chamonix',
+    pictures: []
+  },
+  {
+    id: '8b575c07-33ad-4344-97f8-a20a5f91f336',
+    description: 'Chamonix - with an embankment of a mighty river as a centre of attraction',
+    name: 'Kioto',
     pictures: [
       {
         src: 'https://22.objects.htmlacademy.pro/static/destinations/10.jpg',
         description: 'Chamonix a perfect place to stay with a family'
       }
     ]
-  },
-  {
-    id: '8b575c07-33ad-4344-97f8-a20a5f91f336',
-    description: '',
-    name: 'Kioto',
-    pictures: []
   },
   {
     id: 'fd9d7a4c-fb5a-4fd5-95e4-d50deb29f50f',

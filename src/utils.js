@@ -31,6 +31,7 @@ function getDifferenceInTime(start, end) {
 
     case difference > SECONDS_IN_MINUTES && difference < SECONDS_IN_MINUTES * HOURS_IN_DAY:
       return dayjs(difference).format(DateFormat.HOUR_MINUTES_WITH_POSTFIX);
+
     default:
       return dayjs(difference).format(DateFormat.DAY_HOUR_MINUTES_WITH_POSTFIX);
   }

@@ -1,12 +1,13 @@
-import { POINT_COUNT } from '../const';
-import { mockDestinations } from '../mock/destinations';
-import { mockOffers } from '../mock/offers';
-import { getRandomPoints } from '../mock/points';
-
 export default class PointModel {
-  points = Array.from({length: POINT_COUNT}, getRandomPoints);
-  offers = mockOffers;
-  destinations = mockDestinations;
+  points = {};
+  offers = {};
+  destinations = {};
+
+  constructor({ points, offers, destinations }) {
+    this.points = points;
+    this.offers = offers;
+    this.destinations = destinations;
+  }
 
   getPoints() {
     return this.points;

@@ -1,3 +1,4 @@
+import { POINT_COUNT } from '../const';
 import { getRandomArrayElement, getRandomNumber } from '../utils';
 
 const mockPoints = [
@@ -34,7 +35,7 @@ const mockPoints = [
     basePrice: getRandomNumber(10000),
     dateFrom: '2024-01-27T19:49:05.048Z',
     dateTo: '2024-01-29T04:35:05.048Z',
-    destination: '8d918a87-177b-4333-bcda-670dab018496',
+    destination: '57463106-aea1-4e48-9444-62c980b56484',
     isFavorite: !!getRandomNumber(1),
     offers: [
       '055ba681-0802-460d-8b60-9d222286bd59'
@@ -46,7 +47,7 @@ const mockPoints = [
     basePrice: getRandomNumber(10000),
     dateFrom: '2024-02-01T22:56:05.048Z',
     dateTo: '2024-02-03T13:29:05.048Z',
-    destination: '8d918a87-177b-4333-bcda-670dab018496',
+    destination: '9dede120-f5d3-4e99-99ad-df12a2268571',
     isFavorite: !!getRandomNumber(1),
     offers: [],
     type: 'sightseeing',
@@ -54,7 +55,17 @@ const mockPoints = [
 ];
 
 function getRandomPoints() {
-  return getRandomArrayElement(mockPoints);
+  const pointsRandom = Array.from({length: 0});
+
+  while (pointsRandom.length < POINT_COUNT) {
+    const item = getRandomArrayElement(mockPoints);
+
+    if (!pointsRandom.includes(item)) {
+      pointsRandom.push(item);
+    }
+  }
+
+  return pointsRandom;
 }
 
 export { getRandomPoints };

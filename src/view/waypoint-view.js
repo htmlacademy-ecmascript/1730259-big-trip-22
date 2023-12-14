@@ -12,9 +12,9 @@ function createOfferTemplate({title, price}) {
   );
 }
 
-function createWaypointTemplate(point, offers, destination) {
-  const { type, dateFrom, dateTo, isFavorite, basePrice, offers: pointOffers, destination: pointDestination } = point;
-  const filteredDestinationById = getElementById(destination, pointDestination);
+function createWaypointTemplate(points, offers, destinations) {
+  const { type, dateFrom, dateTo, isFavorite, basePrice, offers: pointOffers, destination: pointDestination } = points;
+  const filteredDestinationById = getElementById(destinations, pointDestination);
   const { name } = filteredDestinationById;
   const filteredOffersById = getElementById(getElementByType(offers, type).offers, pointOffers);
 
@@ -58,14 +58,14 @@ function createWaypointTemplate(point, offers, destination) {
 }
 
 export default class WaypointView {
-  constructor({point, offers, destination}) {
-    this.point = point;
+  constructor({points, offers, destinations}) {
+    this.points = points;
     this.offers = offers;
-    this.destination = destination;
+    this.destinations = destinations;
   }
 
   getTemplate() {
-    return createWaypointTemplate(this.point, this.offers, this.destination);
+    return createWaypointTemplate(this.points, this.offers, this.destinations);
   }
 
   getElement() {

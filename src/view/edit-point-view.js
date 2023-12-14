@@ -2,13 +2,13 @@ import { DateFormat, POINTS_TYPE } from '../const.js';
 import {createElement} from '../render.js';
 import { capitalize, getElementById, getElementByType, humanizeTaskDueDate } from '../utils.js';
 
-function createTypeTemplate(type, checkedType) {
+function createTypeTemplate(type, checkedType, id) {
   const isChecked = checkedType === type ? 'checked' : false;
 
   return (
     `<div class="event__type-item">
-      <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${isChecked}>
-      <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${capitalize(type)}</label>
+      <input id="event-type-${type}-${id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${isChecked}>
+      <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-${id}">${capitalize(type)}</label>
     </div>`
   );
 }
@@ -51,25 +51,29 @@ function createPhotoTemplate(photo) {
 }
 
 function createPhotoContainerTemplate(pictures) {
-  return (
-    `<div class="event__photos-container">
-      <div class="event__photos-tape">
-        ${pictures.map((item) => createPhotoTemplate(item)).join('')}
-      </div>
-    </div>`
-  );
+  if (pictures.length > 0) {
+    return (
+      `<div class="event__photos-container">
+        <div class="event__photos-tape">
+          ${pictures.map((item) => createPhotoTemplate(item)).join('')}
+        </div>
+      </div>`
+    );
+  }
+
+  return '';
 }
 
 function createDestinationTemplate(destination) {
-  const { description, pictures } = destination;
+  const { description, pictures } = destination || {};
 
-  if (description > 0 || pictures.length > 0) {
+  if (description.length > 0 || pictures.length > 0) {
     return (
       `<section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
         <p class="event__destination-description">${description}</p>
 
-        ${pictures.length !== 0 && createPhotoContainerTemplate(pictures)}
+        ${createPhotoContainerTemplate(pictures)}
       </section>`
     );
   }
@@ -77,10 +81,10 @@ function createDestinationTemplate(destination) {
   return '';
 }
 
-function createEditPointTemplate(point, offers, destination) {
-  const { id, type, dateFrom, dateTo, basePrice, offers: checkedOffers, destination: pointDestination } = point;
+function createEditPointTemplate(points, offers, destinations) {
+  const { id, type, dateFrom, dateTo, basePrice, offers: checkedOffers, destination: pointDestination } = points;
   const filteredOfferByType = getElementByType(offers, type);
-  const filteredDestinationById = getElementById(destination, pointDestination);
+  const filteredDestinationById = getElementById(destinations, pointDestination);
   const { name } = filteredDestinationById;
 
   return (
@@ -99,7 +103,7 @@ function createEditPointTemplate(point, offers, destination) {
                 <fieldset class="event__type-group">
                   <legend class="visually-hidden">Event type</legend>
 
-                  ${POINTS_TYPE.map((item) => createTypeTemplate(item, type)).join('')}
+                  ${POINTS_TYPE.map((item) => createTypeTemplate(item, type, id)).join('')}
                 </fieldset>
               </div>
             </div>
@@ -110,7 +114,7 @@ function createEditPointTemplate(point, offers, destination) {
               </label>
               <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value='${name}' list="destination-list-${id}">
               <datalist id="destination-list-${id}">
-                ${destination.map((item) => `<option value=${item.name}></option>`)}
+                ${destinations.map((item) => `<option value=${item.name}></option>`)}
               </datalist>
             </div>
 
@@ -147,14 +151,14 @@ function createEditPointTemplate(point, offers, destination) {
 }
 
 export default class EditPointView {
-  constructor({point, offers, destination}) {
-    this.point = point;
+  constructor({points, offers, destinations}) {
+    this.points = points;
     this.offers = offers;
-    this.destination = destination;
+    this.destinations = destinations;
   }
 
   getTemplate() {
-    return createEditPointTemplate(this.point, this.offers, this.destination);
+    return createEditPointTemplate(this.points, this.offers, this.destinations);
   }
 
   getElement() {
