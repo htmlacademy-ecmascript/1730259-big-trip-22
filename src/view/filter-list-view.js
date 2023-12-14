@@ -3,6 +3,7 @@ import {createElement} from '../render.js';
 
 function createFilterItemTemplate(type) {
   const isChecked = DEFAULT_FILTER === type ? 'checked' : '';
+
   return (
     `<div class="trip-filters__filter">
       <input id="filter-${type}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${type}" ${isChecked}>
@@ -14,7 +15,7 @@ function createFilterItemTemplate(type) {
 function createFilterListTemplate() {
   return (
     `<form class="trip-filters" action="#" method="get">
-      ${Object.values(FILTERS_TYPE).map((type) => createFilterItemTemplate(type)).join('')}
+      ${FILTERS_TYPE.map((type) => createFilterItemTemplate(type)).join('')}
 
       <button class="visually-hidden" type="submit">Accept filter</button>
     </form>`

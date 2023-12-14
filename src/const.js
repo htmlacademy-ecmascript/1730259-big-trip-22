@@ -13,13 +13,12 @@ export const DATE_FORMAT = {
   hours: 'HH:mm'
 };
 
-export const FILTERS_TYPE = {
-  everything: 'everything',
-  future: 'future',
-  present: 'present',
-  past: 'past',
-};
+export const FILTERS_TYPE = ['everything', 'future', 'present', 'past'];
 
-export const DEFAULT_FILTER = FILTERS_TYPE.everything;
+export const DEFAULT_FILTER = FILTERS_TYPE[0];
+
+export const SORT_TYPE = ['day', 'event', 'time', 'price', 'offers'];
+
+export const DEFAULT_SORT = SORT_TYPE[0];
 
 export const POINTS_TYPE = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
