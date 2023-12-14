@@ -1,6 +1,6 @@
 import { DATE_FORMAT, POINTS_TYPE } from '../const.js';
 import {createElement} from '../render.js';
-import { capitalize, humanizeTaskDueDate } from '../utils.js';
+import { capitalize, getElementById, getElementByType, humanizeTaskDueDate } from '../utils.js';
 
 function createTypeTemplate(type) {
   return (
@@ -13,7 +13,7 @@ function createTypeTemplate(type) {
 
 function createOfferTemplate(offer, checkedOffers) {
   const {id, title, price} = offer;
-  const isChecked = checkedOffers.map((item) => item.id).includes(id) ? 'checked' : '';
+  const isChecked = checkedOffers.includes(id) ? 'checked' : '';
 
   return (
     `<div class="event__offer-selector">
@@ -79,9 +79,11 @@ function createDestinationTemplate(destination) {
   return '';
 }
 
-function createEditPointTemplate(point, offers, checkedOffers, destination) {
-  const { type, dateFrom, dateTo, basePrice } = point;
-  const { name } = destination;
+function createEditPointTemplate(point, offers, destination) {
+  const { type, dateFrom, dateTo, basePrice, offers: checkedOffers, destination: pointDestination } = point;
+  const filteredOfferByType = getElementByType(offers, type);
+  const filteredDestinationById = getElementById(destination, pointDestination);
+  const { name } = filteredDestinationById;
 
   return (
     `
@@ -139,8 +141,8 @@ function createEditPointTemplate(point, offers, checkedOffers, destination) {
             </button>
           </header>
           <section class="event__details">
-            ${createOfferListTemplate(offers, checkedOffers)}
-            ${createDestinationTemplate(destination)}
+            ${createOfferListTemplate(filteredOfferByType, checkedOffers)}
+            ${createDestinationTemplate(filteredDestinationById)}
           </section>
         </form>
       </li>
@@ -149,15 +151,14 @@ function createEditPointTemplate(point, offers, checkedOffers, destination) {
 }
 
 export default class EditPointView {
-  constructor({point, offers, checkedOffers, destination}) {
+  constructor({point, offers, destination}) {
     this.point = point;
     this.offers = offers;
-    this.checkedOffers = checkedOffers;
     this.destination = destination;
   }
 
   getTemplate() {
-    return createEditPointTemplate(this.point, this.offers, this.checkedOffers, this.destination);
+    return createEditPointTemplate(this.point, this.offers, this.destination);
   }
 
   getElement() {

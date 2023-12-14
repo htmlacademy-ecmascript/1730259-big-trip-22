@@ -16,23 +16,7 @@ export default class PointModel {
     return this.offers;
   }
 
-  getOfferByTipe(type) {
-    const allOffers = this.getOffer();
-    return allOffers.find((offer) => offer.type === type);
-  }
-
-  getOfferById(type, itemsId) {
-    const offersType = this.getOfferByTipe(type);
-
-    return offersType.offers.filter((item) => itemsId.find((id) => item.id === id));
-  }
-
   getDestination() {
     return this.destination;
-  }
-
-  getDestinationById(id) {
-    const allDestination = this.getDestination();
-    return allDestination.find((item) => item.id === id);
   }
 }

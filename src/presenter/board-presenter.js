@@ -21,17 +21,17 @@ export default class BoardPresenter {
 
     render(new EditPointView({
       point: this.boardPoint[0],
-      checkedOffers: [...this.pointModel.getOfferById(this.boardPoint[0].type, this.boardPoint[0].offers)],
-      offers: this.pointModel.getOfferByTipe(this.boardPoint[0].type),
-      destination: this.pointModel.getDestinationById(this.boardPoint[0].destination)
+      offers: this.pointModel.getOffer(),
+      destination: this.pointModel.getDestination()
     }), this.weapointListView.getElement());
 
     for (let i = 1; i < this.boardPoint.length; i++) {
       render(new WaypointView({
         point: this.boardPoint[i],
-        offers: [...this.pointModel.getOfferById(this.boardPoint[i].type, this.boardPoint[i].offers)],
-        destination: this.pointModel.getDestinationById(this.boardPoint[i].destination)
+        offers: this.pointModel.getOffer(),
+        destination: this.pointModel.getDestination()
       }), this.weapointListView.getElement());
     }
+
   }
 }

@@ -36,7 +36,7 @@ function getDifferenceInTime(start, end) {
   }
 }
 
-export const getDestinationNames = (destinations, points = undefined) => {
+const getDestinationNames = (destinations, points = undefined) => {
   if (points && points.length > 0) {
     return [...new Set(points.map((point) => destinations.find((item) => point.destination === item.id)).map((item) => item.name))];
   }
@@ -44,13 +44,13 @@ export const getDestinationNames = (destinations, points = undefined) => {
   return [...new Set(destinations.map((destination) => destination.name))];
 };
 
-export const getMinData = (items) => humanizeTaskDueDate(dayjs.min(items.map((item) => dayjs(item.dateFrom))), DATE_FORMAT.dayMonth);
+const getMinData = (items) => humanizeTaskDueDate(dayjs.min(items.map((item) => dayjs(item.dateFrom))), DATE_FORMAT.dayMonth);
 
-export const getMaxData = (items) => humanizeTaskDueDate(dayjs.max(items.map((item) => dayjs(item.dateTo))), DATE_FORMAT.dayMonth);
+const getMaxData = (items) => humanizeTaskDueDate(dayjs.max(items.map((item) => dayjs(item.dateTo))), DATE_FORMAT.dayMonth);
 
-export const capitalize = (item) => item.charAt(0).toUpperCase() + item.substring(1);
+const capitalize = (item) => item.charAt(0).toUpperCase() + item.substring(1);
 
-export const getFullPrice = (points , offers) => {
+const getFullPrice = (points , offers) => {
   const baseFullPrice = points.map((point) => point.basePrice).reduce((accumulator, value) => accumulator + value, 0);
   const offerPoints = points.map((point) => point.offers).flat(Infinity);
   const newOffers = offers.map((offer) => offer.offers).flat().filter((item) => offerPoints.find((offer) => offer === item.id)).map((item) => item.price).reduce((accumulator, value) => accumulator + value, 0);
@@ -58,5 +58,25 @@ export const getFullPrice = (points , offers) => {
   return baseFullPrice + newOffers;
 };
 
+const getElementByType = (elements, type) => elements.find((element) => element.type === type);
 
-export {getRandomArrayElement, getRandomNumber, humanizeTaskDueDate, getDifferenceInTime};
+function getElementById(elements, itemsId) {
+  if (Array.isArray(itemsId)) {
+    return elements.filter((element) => itemsId.find((id) => element.id === id));
+  }
+  return elements.find((element) => element.id === itemsId);
+}
+
+export {
+  getRandomArrayElement,
+  getRandomNumber,
+  humanizeTaskDueDate,
+  getDifferenceInTime,
+  getDestinationNames,
+  getMinData,
+  getMaxData,
+  capitalize,
+  getFullPrice,
+  getElementByType,
+  getElementById,
+};

@@ -1,6 +1,6 @@
 import { DATE_FORMAT } from '../const.js';
 import {createElement} from '../render.js';
-import { getDifferenceInTime, humanizeTaskDueDate } from '../utils.js';
+import { getDifferenceInTime, getElementById, getElementByType, humanizeTaskDueDate } from '../utils.js';
 
 function createOfferTemplate({title, price}) {
   return (
@@ -13,8 +13,10 @@ function createOfferTemplate({title, price}) {
 }
 
 function createWaypointTemplate(point, offers, destination) {
-  const { type, dateFrom, dateTo, isFavorite, basePrice } = point;
-  const { name } = destination;
+  const { type, dateFrom, dateTo, isFavorite, basePrice, offers: pointOffers, destination: pointDestination } = point;
+  const filteredDestinationById = getElementById(destination, pointDestination);
+  const { name } = filteredDestinationById;
+  const filteredOffersById = getElementById(getElementByType(offers, type).offers, pointOffers);
 
   return (
     `
@@ -38,7 +40,7 @@ function createWaypointTemplate(point, offers, destination) {
           </p>
           <h4 class="visually-hidden">Offers:</h4>
           <ul class="event__selected-offers">
-            ${offers.map((offer) => createOfferTemplate(offer)).join('')}
+            ${filteredOffersById && filteredOffersById.map((offer) => createOfferTemplate(offer)).join('')}
           </ul>
           <button class="event__favorite-btn ${isFavorite && 'event__favorite-btn--active'}" onclick="this.classList.toggle('event__favorite-btn--active')" type="button">
             <span class="visually-hidden">Add to favorite</span>
