@@ -1,4 +1,4 @@
-import { DATE_FORMAT, POINTS_TYPE } from '../const.js';
+import { DateFormat, POINTS_TYPE } from '../const.js';
 import {createElement} from '../render.js';
 import { capitalize, getElementById, getElementByType, humanizeTaskDueDate } from '../utils.js';
 
@@ -49,17 +49,13 @@ function createPhotoTemplate(photo) {
 }
 
 function createPhotoContainerTemplate(pictures) {
-  if (pictures.length > 0) {
-    return (
-      `<div class="event__photos-container">
-        <div class="event__photos-tape">
-          ${pictures.map((item) => createPhotoTemplate(item)).join('')}
-        </div>
-      </div>`
-    );
-  }
-
-  return '';
+  return (
+    `<div class="event__photos-container">
+      <div class="event__photos-tape">
+        ${pictures.map((item) => createPhotoTemplate(item)).join('')}
+      </div>
+    </div>`
+  );
 }
 
 function createDestinationTemplate(destination) {
@@ -71,7 +67,7 @@ function createDestinationTemplate(destination) {
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
         <p class="event__destination-description">${description}</p>
 
-        ${createPhotoContainerTemplate(pictures)}
+        ${pictures.length !== createPhotoContainerTemplate(pictures)}
       </section>`
     );
   }
@@ -120,10 +116,10 @@ function createEditPointTemplate(point, offers, destination) {
 
             <div class="event__field-group  event__field-group--time">
               <label class="visually-hidden" for="event-start-time-1">From</label>
-              <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value=${humanizeTaskDueDate(dateFrom, DATE_FORMAT.full)}>
+              <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value=${humanizeTaskDueDate(dateFrom, DateFormat.DAY_MONTH_YEAR)}>
               &mdash;
               <label class="visually-hidden" for="event-end-time-1">To</label>
-              <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${humanizeTaskDueDate(dateTo, DATE_FORMAT.full)}>
+              <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${humanizeTaskDueDate(dateTo, DateFormat.DAY_MONTH_YEAR)}>
             </div>
 
             <div class="event__field-group  event__field-group--price">

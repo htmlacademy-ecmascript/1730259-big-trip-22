@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import minMax from 'dayjs/plugin/minMax';
 import {
-  DATE_FORMAT,
+  DateFormat,
   HOURS_IN_DAY,
   MILLISECONDS_IN_MINUTES,
   SECONDS_IN_MINUTES
@@ -27,12 +27,12 @@ function getDifferenceInTime(start, end) {
 
   switch (difference) {
     case difference < SECONDS_IN_MINUTES:
-      return dayjs(difference).format('mm[M]');
+      return dayjs(difference).format(DateFormat.MINUTES_WITH_POSTFIX);
 
     case difference > SECONDS_IN_MINUTES && difference < SECONDS_IN_MINUTES * HOURS_IN_DAY:
-      return dayjs(difference).format('HH[H] mm[M]');
+      return dayjs(difference).format(DateFormat.HOUR_MINUTES_WITH_POSTFIX);
     default:
-      return dayjs(difference).format('DD[D] HH[H] mm[M]');
+      return dayjs(difference).format(DateFormat.DAY_HOUR_MINUTES_WITH_POSTFIX);
   }
 }
 
@@ -44,9 +44,9 @@ const getDestinationNames = (destinations, points = undefined) => {
   return [...new Set(destinations.map((destination) => destination.name))];
 };
 
-const getMinData = (items) => humanizeTaskDueDate(dayjs.min(items.map((item) => dayjs(item.dateFrom))), DATE_FORMAT.dayMonth);
+const getMinData = (items) => humanizeTaskDueDate(dayjs.min(items.map((item) => dayjs(item.dateFrom))), DateFormat.DAY_MONTH);
 
-const getMaxData = (items) => humanizeTaskDueDate(dayjs.max(items.map((item) => dayjs(item.dateTo))), DATE_FORMAT.dayMonth);
+const getMaxData = (items) => humanizeTaskDueDate(dayjs.max(items.map((item) => dayjs(item.dateTo))), DateFormat.DAY_MONTH);
 
 const capitalize = (item) => item.charAt(0).toUpperCase() + item.substring(1);
 

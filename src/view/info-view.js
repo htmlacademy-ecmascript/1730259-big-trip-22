@@ -1,21 +1,21 @@
 import {createElement} from '../render.js';
 import { getDestinationNames, getFullPrice, getMaxData, getMinData } from '../utils.js';
 
-function createInfoTemplate(points, offers, destinations) {
-  function createTitle() {
-    const filterPointsByNames = getDestinationNames(destinations, points);
+function createTitle(points, destinations) {
+  const filterPointsByNames = getDestinationNames(destinations, points);
 
-    if (filterPointsByNames.length > 3) {
-      return `${filterPointsByNames.at(0)} &mdash;...&mdash; ${filterPointsByNames.at(-1)}`;
-    }
-
-    return filterPointsByNames.join(' &mdash; ');
+  if (filterPointsByNames.length > 3) {
+    return `${filterPointsByNames.at(0)} &mdash;...&mdash; ${filterPointsByNames.at(-1)}`;
   }
 
+  return filterPointsByNames.join(' &mdash; ');
+}
+
+function createInfoTemplate(points, offers, destinations) {
   return (
     `<section class="trip-main__trip-info  trip-info">
         <div class="trip-info__main">
-          <h1 class="trip-info__title">${createTitle()}</h1>
+          <h1 class="trip-info__title">${createTitle(points, destinations)}</h1>
 
           <p class="trip-info__dates">${getMinData(points)}&nbsp;&mdash;&nbsp;${getMaxData(points)}</p>
         </div>

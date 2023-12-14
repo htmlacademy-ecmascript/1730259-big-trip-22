@@ -1,4 +1,4 @@
-import { DATE_FORMAT } from '../const.js';
+import { DateFormat } from '../const.js';
 import {createElement} from '../render.js';
 import { getDifferenceInTime, getElementById, getElementByType, humanizeTaskDueDate } from '../utils.js';
 
@@ -22,16 +22,16 @@ function createWaypointTemplate(point, offers, destination) {
     `
       <li class="trip-events__item">
         <div class="event">
-          <time class="event__date" datetime=${dateFrom}>${humanizeTaskDueDate(dateFrom, DATE_FORMAT.monthDay)}</time>
+          <time class="event__date" datetime=${dateFrom}>${humanizeTaskDueDate(dateFrom, DateFormat.MONTH_DAY)}</time>
           <div class="event__type">
             <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
           </div>
           <h3 class="event__title">${type} ${name}</h3>
           <div class="event__schedule">
             <p class="event__time">
-              <time class="event__start-time" datetime=${dateFrom}>${humanizeTaskDueDate(dateFrom, DATE_FORMAT.hours)}</time>
+              <time class="event__start-time" datetime=${dateFrom}>${humanizeTaskDueDate(dateFrom, DateFormat.HOUR_MINUTES)}</time>
               &mdash;
-              <time class="event__end-time" datetime=${dateTo}>${humanizeTaskDueDate(dateTo, DATE_FORMAT.hours)}</time>
+              <time class="event__end-time" datetime=${dateTo}>${humanizeTaskDueDate(dateTo, DateFormat.HOUR_MINUTES)}</time>
             </p>
             <p class="event__duration">${getDifferenceInTime(dateFrom, dateTo)}</p>
           </div>
@@ -40,7 +40,7 @@ function createWaypointTemplate(point, offers, destination) {
           </p>
           <h4 class="visually-hidden">Offers:</h4>
           <ul class="event__selected-offers">
-            ${filteredOffersById && filteredOffersById.map((offer) => createOfferTemplate(offer)).join('')}
+            ${filteredOffersById.map((offer) => createOfferTemplate(offer)).join('')}
           </ul>
           <button class="event__favorite-btn ${isFavorite && 'event__favorite-btn--active'}" onclick="this.classList.toggle('event__favorite-btn--active')" type="button">
             <span class="visually-hidden">Add to favorite</span>
