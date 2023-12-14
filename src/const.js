@@ -13,4 +13,13 @@ export const DATE_FORMAT = {
   hours: 'HH:mm'
 };
 
+export const FILTERS_TYPE = {
+  everything: 'everything',
+  future: 'future',
+  present: 'present',
+  past: 'past',
+};
+
+export const DEFAULT_FILTER = FILTERS_TYPE.everything;
+
 export const POINTS_TYPE = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
