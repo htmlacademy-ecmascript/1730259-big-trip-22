@@ -1,23 +1,24 @@
-export default class PointModel {
-  points = {};
-  offers = {};
-  destinations = {};
+import { mockDestinations } from '../mock/destinations';
+import { mockOffers } from '../mock/offers';
+import { getRandomPoints } from '../mock/points';
 
-  constructor({ points, offers, destinations }) {
-    this.points = points;
-    this.offers = offers;
-    this.destinations = destinations;
-  }
+export default class PointModel {
+  #points = {};
+  #offers = {};
+  #destinations = {};
 
   getPoints() {
-    return this.points;
+    this.#points = getRandomPoints();
+    return this.#points;
   }
 
   getOffers() {
-    return this.offers;
+    this.#offers = mockOffers;
+    return this.#offers;
   }
 
   getDestinations() {
-    return this.destinations;
+    this.#destinations = mockDestinations;
+    return this.#destinations;
   }
 }
