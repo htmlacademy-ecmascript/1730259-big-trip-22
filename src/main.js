@@ -12,11 +12,14 @@ const containerElement = main.querySelector('.trip-events');
 
 const pointModel = new PointModel();
 pointModel.init();
+
 const infoPresenter = new InfoPresenter({
   infoContainer: infoHeader,
   pointModel
 });
+
 const filterPresenter = new FilterPresenter({filterConteiner: headerFilterElement});
+
 const boardPresenter = new BoardPresenter({
   boardContainer: containerElement,
   pointModel
