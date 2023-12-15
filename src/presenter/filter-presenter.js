@@ -1,8 +1,8 @@
 import {render} from '../render';
-import FilterView from '../view/filter-view.js';
+import FilterListView from '../view/filter-list-view.js';
 
 export default class FilterPresenter {
-  filterView = new FilterView();
+  filterListView = new FilterListView();
 
 
   constructor({filterConteiner}) {
@@ -10,6 +10,6 @@ export default class FilterPresenter {
   }
 
   init() {
-    render(this.filterView, this.filterConteiner);
+    render(this.filterListView, this.filterConteiner);
   }
 }
