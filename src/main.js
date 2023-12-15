@@ -11,6 +11,7 @@ const main = document.querySelector('.page-main');
 const containerElement = main.querySelector('.trip-events');
 
 const pointModel = new PointModel();
+pointModel.init();
 const infoPresenter = new InfoPresenter({
   infoContainer: infoHeader,
   pointModel
