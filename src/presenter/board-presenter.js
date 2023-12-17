@@ -11,7 +11,9 @@ export default class BoardPresenter {
   #weapointListView = new WeapointListView();
   #sortListView = new SortListView();
 
-  #boardPoint = [];
+  #boardPoints = [];
+  #boardOffers = [];
+  #boardDestinations = [];
 
   constructor({boardContainer, pointModel}) {
     this.#boardContainer = boardContainer;
@@ -19,22 +21,11 @@ export default class BoardPresenter {
   }
 
   init() {
-    const points = this.#pointModel.points;
-    const offers = this.#pointModel.offers;
-    const destinations = this.#pointModel.destinations;
+    this.#boardPoints = [...this.#pointModel.points];
+    this.#boardOffers = [...this.#pointModel.offers];
+    this.#boardDestinations = [...this.#pointModel.destinations];
 
-    this.#boardPoint = [...points];
-
-    render(this.#sortListView, this.#boardContainer);
-    render(this.#weapointListView, this.#boardContainer);
-
-    for (let i = 0; i < this.#boardPoint.length; i++) {
-      this.#renderPoint({
-        points: this.#boardPoint[i],
-        offers: offers,
-        destinations: destinations
-      });
-    }
+    this.#renderBoard();
   }
 
   #renderPoint({points, offers, destinations}) {
@@ -78,5 +69,18 @@ export default class BoardPresenter {
     }
 
     render(pointComponent, this.#weapointListView.element);
+  }
+
+  #renderBoard() {
+    render(this.#sortListView, this.#boardContainer);
+    render(this.#weapointListView, this.#boardContainer);
+
+    for (let i = 0; i < this.#boardPoints.length; i++) {
+      this.#renderPoint({
+        points: this.#boardPoints[i],
+        offers: this.#boardOffers,
+        destinations: this.#boardDestinations
+      });
+    }
   }
 }
