@@ -1,4 +1,4 @@
-import { DateFormat, POINTS_TYPE } from '../const.js';
+import { DEFAULT_POINT, DateFormat, POINTS_TYPE } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 import { capitalize, getElementById, getElementByType, humanizeTaskDueDate } from '../utils.js';
 
@@ -65,9 +65,9 @@ function createPhotoContainerTemplate(pictures) {
 }
 
 function createDestinationTemplate(destination) {
-  const { description, pictures } = destination || {};
+  if (destination) {
+    const { description, pictures } = destination;
 
-  if (description.length > 0 || pictures.length > 0) {
     return (
       `<section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
@@ -85,7 +85,8 @@ function createEditPointTemplate(points, offers, destinations) {
   const { id, type, dateFrom, dateTo, basePrice, offers: checkedOffers, destination: pointDestination } = points;
   const filteredOfferByType = getElementByType(offers, type);
   const filteredDestinationById = getElementById(destinations, pointDestination);
-  const { name } = filteredDestinationById;
+
+  const { name } = filteredDestinationById || {name: ''};
 
   return (
     `
@@ -151,15 +152,28 @@ function createEditPointTemplate(points, offers, destinations) {
 }
 
 export default class EditPointView extends AbstractView {
-  constructor({points, offers, destinations}) {
+  #points = null;
+  #offers = null;
+  #destinations = null;
+  #handleFormSubmit = null;
+
+  constructor({points = DEFAULT_POINT, offers, destinations, onFormSubmit}) {
     super();
 
-    this.points = points;
-    this.offers = offers;
-    this.destinations = destinations;
+    this.#points = points;
+    this.#offers = offers;
+    this.#destinations = destinations;
+    this.#handleFormSubmit = onFormSubmit;
+
+    this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
   }
 
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormSubmit();
+  };
+
   get template() {
-    return createEditPointTemplate(this.points, this.offers, this.destinations);
+    return createEditPointTemplate(this.#points, this.#offers, this.#destinations);
   }
 }

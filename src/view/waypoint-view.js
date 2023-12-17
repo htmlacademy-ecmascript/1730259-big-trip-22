@@ -42,7 +42,7 @@ function createWaypointTemplate(points, offers, destinations) {
           <ul class="event__selected-offers">
             ${filteredOffersById.map((offer) => createOfferTemplate(offer)).join('')}
           </ul>
-          <button class="event__favorite-btn ${isFavorite && 'event__favorite-btn--active'}" onclick="this.classList.toggle('event__favorite-btn--active')" type="button">
+          <button class="event__favorite-btn ${isFavorite && 'event__favorite-btn--active'}" type="button">
             <span class="visually-hidden">Add to favorite</span>
             <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
               <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"/>
@@ -58,15 +58,36 @@ function createWaypointTemplate(points, offers, destinations) {
 }
 
 export default class WaypointView extends AbstractView {
-  constructor({points, offers, destinations}) {
+  #points = null;
+  #offers = null;
+  #destinations = null;
+  #handleEditClick = null;
+  #handleFavoritClick = null;
+
+  constructor({points, offers, destinations, onFavoritClick, onEditClick}) {
     super();
 
-    this.points = points;
-    this.offers = offers;
-    this.destinations = destinations;
+    this.#points = points;
+    this.#offers = offers;
+    this.#destinations = destinations;
+    this.#handleFavoritClick = onFavoritClick;
+    this.#handleEditClick = onEditClick;
+
+    this.element.querySelector('.event__favorite-btn').addEventListener('click', this.#toogleClickHandler);
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
   }
 
+  #toogleClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFavoritClick();
+  };
+
+  #editClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleEditClick();
+  };
+
   get template() {
-    return createWaypointTemplate(this.points, this.offers, this.destinations);
+    return createWaypointTemplate(this.#points, this.#offers, this.#destinations);
   }
 }

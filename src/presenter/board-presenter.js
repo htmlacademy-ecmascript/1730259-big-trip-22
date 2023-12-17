@@ -1,4 +1,4 @@
-import { render } from '../framework/render';
+import { render, replace } from '../framework/render';
 import WeapointListView from '../view/waypoint-list-view';
 import EditPointView from '../view/edit-point-view';
 import WaypointView from '../view/waypoint-view';
@@ -18,11 +18,6 @@ export default class BoardPresenter {
     this.#pointModel = pointModel;
   }
 
-  #renderPoint(data) {
-    const pointComponent = new WaypointView(data);
-    render(pointComponent, this.#weapointListView.element);
-  }
-
   init() {
     const points = this.#pointModel.points;
     const offers = this.#pointModel.offers;
@@ -33,18 +28,51 @@ export default class BoardPresenter {
     render(this.#sortListView, this.#boardContainer);
     render(this.#weapointListView, this.#boardContainer);
 
-    render(new EditPointView({
-      points: this.#boardPoint[0],
-      offers: offers,
-      destinations: destinations
-    }), this.#weapointListView.element);
-
-    for (let i = 1; i < this.#boardPoint.length; i++) {
+    for (let i = 0; i < this.#boardPoint.length; i++) {
       this.#renderPoint({
         points: this.#boardPoint[i],
         offers: offers,
         destinations: destinations
       });
     }
+  }
+
+  #renderPoint({points, offers, destinations}) {
+    const escKeyDownHandler = (evt) => {
+      if (evt.key === 'Escape') {
+        evt.preventDefault();
+        replaceFormToCard();
+        document.removeEventListener('keydown', escKeyDownHandler);
+      }
+    };
+
+    const pointComponent = new WaypointView({
+      points,
+      offers,
+      destinations,
+      onEditClick: () => {
+        replaceCardToForm();
+        document.addEventListener('keydown', escKeyDownHandler);
+      }
+    });
+
+    const pointEditComponent = new EditPointView({
+      points,
+      offers,
+      destinations,
+      onFormSubmit: () => {
+        replaceFormToCard();
+        document.addEventListener('keydown', escKeyDownHandler);
+      }
+    });
+
+    function replaceCardToForm() {
+      replace(pointEditComponent, pointComponent);
+    }
+    function replaceFormToCard() {
+      replace(pointComponent, pointEditComponent);
+    }
+
+    render(pointComponent, this.#weapointListView.element);
   }
 }
