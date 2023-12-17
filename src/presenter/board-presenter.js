@@ -60,6 +60,10 @@ export default class BoardPresenter {
       points,
       offers,
       destinations,
+      onRollupButtonClick: () => {
+        replaceFormToCard();
+        document.addEventListener('keydown', escKeyDownHandler);
+      },
       onFormSubmit: () => {
         replaceFormToCard();
         document.addEventListener('keydown', escKeyDownHandler);
