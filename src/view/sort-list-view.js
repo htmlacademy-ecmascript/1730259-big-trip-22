@@ -1,5 +1,5 @@
 import { SORT_TYPE, DEFAULT_SORT } from '../const.js';
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 function createSortItemTemplate(type) {
   const isChecked = DEFAULT_SORT === type ? 'checked' : '';
@@ -20,20 +20,8 @@ function createSortListTemplate() {
   );
 }
 
-export default class SortListView {
-  getTemplate() {
+export default class SortListView extends AbstractView {
+  get template() {
     return createSortListTemplate();
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
   }
 }

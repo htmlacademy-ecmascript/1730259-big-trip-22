@@ -1,5 +1,5 @@
+import AbstractView from '../framework/view/abstract-view.js';
 import { DEFAULT_FILTER, FILTERS_TYPE } from '../const.js';
-import {createElement} from '../render.js';
 
 function createFilterItemTemplate(type) {
   const isChecked = DEFAULT_FILTER === type ? 'checked' : '';
@@ -22,20 +22,8 @@ function createFilterListTemplate() {
   );
 }
 
-export default class FilterListView {
-  getTemplate() {
+export default class FilterListView extends AbstractView {
+  get template() {
     return createFilterListTemplate();
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
   }
 }

@@ -1,5 +1,5 @@
 import { DateFormat } from '../const.js';
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import { getDifferenceInTime, getElementById, getElementByType, humanizeTaskDueDate } from '../utils.js';
 
 function createOfferTemplate({title, price}) {
@@ -57,26 +57,16 @@ function createWaypointTemplate(points, offers, destinations) {
   );
 }
 
-export default class WaypointView {
+export default class WaypointView extends AbstractView {
   constructor({points, offers, destinations}) {
+    super();
+
     this.points = points;
     this.offers = offers;
     this.destinations = destinations;
   }
 
-  getTemplate() {
+  get template() {
     return createWaypointTemplate(this.points, this.offers, this.destinations);
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
   }
 }

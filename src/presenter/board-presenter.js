@@ -1,4 +1,4 @@
-import {render} from '../render';
+import { render } from '../framework/render';
 import WeapointListView from '../view/waypoint-list-view';
 import EditPointView from '../view/edit-point-view';
 import WaypointView from '../view/waypoint-view';
@@ -27,14 +27,14 @@ export default class BoardPresenter {
       points: this.boardPoint[0],
       offers: offers,
       destinations: destinations
-    }), this.weapointListView.getElement());
+    }), this.weapointListView.element);
 
     for (let i = 1; i < this.boardPoint.length; i++) {
       render(new WaypointView({
         points: this.boardPoint[i],
         offers: offers,
         destinations: destinations
-      }), this.weapointListView.getElement());
+      }), this.weapointListView.element);
     }
 
   }

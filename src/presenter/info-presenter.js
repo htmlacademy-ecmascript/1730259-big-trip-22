@@ -1,4 +1,4 @@
-import {RenderPosition, render} from '../render';
+import { RenderPosition, render } from '../framework/render';
 import InfoView from '../view/info-view';
 
 export default class InfoPresenter {
