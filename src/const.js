@@ -28,11 +28,12 @@ const FilterType = {
   PAST: 'past',
 };
 
-// const FILTERS_TYPE = ['everything', 'future', 'present', 'past'];
-
-const DEFAULT_FILTER = FilterType.EVERYTHING;
-
-// const DEFAULT_FILTER = FILTERS_TYPE[0];
+const SystemMessageList = {
+  [FilterType.EVERYTHING]: 'Click New Event to create your first point',
+  [FilterType.PAST]: 'There are no past events now',
+  [FilterType.PRESENT]: 'There are no present events now',
+  [FilterType.FUTURE]: 'There are no future events now',
+};
 
 const SORT_TYPE = ['day', 'event', 'time', 'price', 'offers'];
 
@@ -58,10 +59,9 @@ export {
   HOURS_IN_DAY,
   DateFormat,
   FilterType,
-  // FILTERS_TYPE,
-  DEFAULT_FILTER,
   SORT_TYPE,
   DEFAULT_SORT,
   POINTS_TYPE,
   DEFAULT_POINT,
+  SystemMessageList
 };
