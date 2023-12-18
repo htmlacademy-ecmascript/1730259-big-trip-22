@@ -4,7 +4,7 @@ import WeapointListView from '../view/waypoint-list-view';
 import EditPointView from '../view/edit-point-view';
 import WaypointView from '../view/waypoint-view';
 import SortListView from '../view/sort-list-view';
-import { FilterType } from '../const';
+import { FilterType, SystemMessageLoad } from '../const';
 
 
 export default class BoardPresenter {
@@ -76,7 +76,7 @@ export default class BoardPresenter {
 
   #renderBoard() {
     if (this.#boardPoints.length === 0) {
-      render(new SystemMessageView({filterType: FilterType.EVERYTHING}), this.#boardContainer);
+      render(new SystemMessageView({filterType: FilterType.EVERYTHING || SystemMessageLoad.LOAD}), this.#boardContainer);
       return;
     }
 
