@@ -8,4 +8,4 @@ const filter = {
   [FilterType.PAST]: (points) => points.filter((point) => isPointPast(point.dateTo)),
 };
 
-export {filter};
+export { filter };

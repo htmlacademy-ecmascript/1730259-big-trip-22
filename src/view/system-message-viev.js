@@ -1,19 +1,22 @@
+import { SystemMessageList } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
-function createSystemMessageTemplate(message) {
+function createSystemMessageTemplate(filterType) {
+  const message = filterType ? SystemMessageList[filterType] : 'Loading...';
+
   return `<p class="trip-events__msg">${message}</p>`;
 }
 
 export default class SystemMessageView extends AbstractView {
-  #message = null;
+  #filterType = null;
 
-  constructor({message}) {
+  constructor({filterType}) {
     super();
 
-    this.#message = message;
+    this.#filterType = filterType;
   }
 
   get template() {
-    return createSystemMessageTemplate(this.#message);
+    return createSystemMessageTemplate(this.#filterType);
   }
 }

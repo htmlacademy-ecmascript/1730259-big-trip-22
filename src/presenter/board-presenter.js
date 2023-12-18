@@ -1,8 +1,11 @@
 import { render, replace } from '../framework/render';
+import SystemMessageView from '../view/system-message-viev';
 import WeapointListView from '../view/waypoint-list-view';
 import EditPointView from '../view/edit-point-view';
 import WaypointView from '../view/waypoint-view';
 import SortListView from '../view/sort-list-view';
+import { FilterType } from '../const';
+
 
 export default class BoardPresenter {
   #boardContainer = null;
@@ -72,6 +75,11 @@ export default class BoardPresenter {
   }
 
   #renderBoard() {
+    if (this.#boardPoints.length === 0) {
+      render(new SystemMessageView({filterType: FilterType.EVERYTHING}), this.#boardContainer);
+      return;
+    }
+
     render(this.#sortListView, this.#boardContainer);
     render(this.#weapointListView, this.#boardContainer);
 
