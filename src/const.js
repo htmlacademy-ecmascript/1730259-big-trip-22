@@ -21,9 +21,18 @@ const DateFormat = {
   DAY_HOUR_MINUTES_WITH_POSTFIX: 'DD[D] HH[H] mm[M]'
 };
 
-const FILTERS_TYPE = ['everything', 'future', 'present', 'past'];
+const FilterType = {
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PRESENT: 'present',
+  PAST: 'past',
+};
 
-const DEFAULT_FILTER = FILTERS_TYPE[0];
+// const FILTERS_TYPE = ['everything', 'future', 'present', 'past'];
+
+const DEFAULT_FILTER = FilterType.EVERYTHING;
+
+// const DEFAULT_FILTER = FILTERS_TYPE[0];
 
 const SORT_TYPE = ['day', 'event', 'time', 'price', 'offers'];
 
@@ -48,7 +57,8 @@ export {
   SECONDS_IN_MINUTES,
   HOURS_IN_DAY,
   DateFormat,
-  FILTERS_TYPE,
+  FilterType,
+  // FILTERS_TYPE,
   DEFAULT_FILTER,
   SORT_TYPE,
   DEFAULT_SORT,

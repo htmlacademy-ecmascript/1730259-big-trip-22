@@ -1,5 +1,5 @@
-import { POINT_COUNT } from '../const';
-import { getRandomArrayElement, getRandomNumber } from '../utils';
+import { POINT_COUNT } from '../const.js';
+import { getRandomArrayElement, getRandomNumber } from '../utils/utils.js';
 
 const mockPoints = [
   {

@@ -1,6 +1,6 @@
 import { DateFormat } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
-import { getDifferenceInTime, getElementById, getElementByType, humanizeTaskDueDate } from '../utils.js';
+import { getDifferenceInTime, getElementById, getElementByType, humanizeTaskDueDate } from '../utils/utils.js';
 
 function createOfferTemplate({title, price}) {
   return (
