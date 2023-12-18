@@ -76,7 +76,7 @@ export default class BoardPresenter {
 
   #renderBoard() {
     if (this.#boardPoints.length === 0) {
-      render(new SystemMessageView({filterType: FilterType.EVERYTHING || SystemMessageLoad.LOAD}), this.#boardContainer);
+      render(new SystemMessageView({ filterType: SystemMessageLoad.LOAD || FilterType.EVERYTHING }), this.#boardContainer);
       return;
     }
 
