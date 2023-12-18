@@ -1,5 +1,5 @@
-import {createElement} from '../render.js';
-import { getDestinationNames, getFullPrice, getMaxData, getMinData } from '../utils.js';
+import AbstractView from '../framework/view/abstract-view.js';
+import { getDestinationNames, getFullPrice, getMaxData, getMinData } from '../utils/utils.js';
 
 function createTitle(points, destinations) {
   const filterPointsByNames = getDestinationNames(destinations, points);
@@ -27,26 +27,16 @@ function createInfoTemplate(points, offers, destinations) {
   );
 }
 
-export default class InfoView {
+export default class InfoView extends AbstractView {
   constructor({points, offers, destinations}) {
+    super();
+
     this.points = points;
     this.offers = offers;
     this.destinations = destinations;
   }
 
-  getTemplate() {
+  get template() {
     return createInfoTemplate(this.points, this.offers, this.destinations);
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
   }
 }

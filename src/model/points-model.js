@@ -13,15 +13,15 @@ export default class PointModel {
     this.#destinations = mockDestinations;
   }
 
-  getPoints() {
+  get points() {
     return this.#points;
   }
 
-  getOffers() {
+  get offers() {
     return this.#offers;
   }
 
-  getDestinations() {
+  get destinations() {
     return this.#destinations;
   }
 }

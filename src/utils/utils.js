@@ -1,13 +1,17 @@
 import dayjs from 'dayjs';
 import minMax from 'dayjs/plugin/minMax';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import {
   DateFormat,
   HOURS_IN_DAY,
   MILLISECONDS_IN_MINUTES,
   SECONDS_IN_MINUTES
-} from './const';
+} from '../const';
 
 dayjs.extend(minMax);
+dayjs.extend(isSameOrBefore);
+dayjs.extend(isSameOrAfter);
 
 function getRandomArrayElement(items) {
   return items[Math.floor(Math.random() * items.length)];
@@ -37,6 +41,18 @@ function getDifferenceInTime(start, end) {
   }
 }
 
+const getMinData = (items) => humanizeTaskDueDate(dayjs.min(items.map((item) => dayjs(item.dateFrom))), DateFormat.DAY_MONTH);
+
+const getMaxData = (items) => humanizeTaskDueDate(dayjs.max(items.map((item) => dayjs(item.dateTo))), DateFormat.DAY_MONTH);
+
+const capitalize = (item) => item.charAt(0).toUpperCase() + item.substring(1);
+
+const isPointFuture = (date) => date && dayjs().isAfter(date);
+
+const isPointPast = (date) => date && dayjs().isBefore(date);
+
+const isPointPastAndFuture = (dateFrom, dateTo) => dayjs().isSameOrBefore(dateFrom) && dayjs().isSameOrAfter(dateTo);
+
 const getDestinationNames = (destinations, points = undefined) => {
   if (points && points.length > 0) {
     return [...new Set(points.map((point) => destinations.find((item) => point.destination === item.id)).map((item) => item.name))];
@@ -44,12 +60,6 @@ const getDestinationNames = (destinations, points = undefined) => {
 
   return [...new Set(destinations.map((destination) => destination.name))];
 };
-
-const getMinData = (items) => humanizeTaskDueDate(dayjs.min(items.map((item) => dayjs(item.dateFrom))), DateFormat.DAY_MONTH);
-
-const getMaxData = (items) => humanizeTaskDueDate(dayjs.max(items.map((item) => dayjs(item.dateTo))), DateFormat.DAY_MONTH);
-
-const capitalize = (item) => item.charAt(0).toUpperCase() + item.substring(1);
 
 const getFullPrice = (points , offers) => {
   const baseFullPrice = points.map((point) => point.basePrice).reduce((accumulator, value) => accumulator + value, 0);
@@ -65,6 +75,7 @@ function getElementById(elements, itemsId) {
   if (Array.isArray(itemsId)) {
     return elements.filter((element) => itemsId.find((id) => element.id === id));
   }
+
   return elements.find((element) => element.id === itemsId);
 }
 
@@ -80,4 +91,7 @@ export {
   getFullPrice,
   getElementByType,
   getElementById,
+  isPointFuture,
+  isPointPast,
+  isPointPastAndFuture,
 };

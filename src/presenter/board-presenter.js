@@ -1,41 +1,94 @@
-import {render} from '../render';
+import { render, replace } from '../framework/render';
+import SystemMessageView from '../view/system-message-viev';
 import WeapointListView from '../view/waypoint-list-view';
 import EditPointView from '../view/edit-point-view';
 import WaypointView from '../view/waypoint-view';
 import SortListView from '../view/sort-list-view';
+import { FilterType } from '../const';
+
 
 export default class BoardPresenter {
-  weapointListView = new WeapointListView();
-  sortListView = new SortListView();
+  #boardContainer = null;
+  #pointModel = null;
 
+  #weapointListView = new WeapointListView();
+  #sortListView = new SortListView();
+
+  #boardPoints = [];
+  #boardOffers = [];
+  #boardDestinations = [];
 
   constructor({boardContainer, pointModel}) {
-    this.boardContainer = boardContainer;
-    this.pointModel = pointModel;
+    this.#boardContainer = boardContainer;
+    this.#pointModel = pointModel;
   }
 
   init() {
-    const points = this.pointModel.getPoints();
-    const offers = this.pointModel.getOffers();
-    const destinations = this.pointModel.getDestinations();
+    this.#boardPoints = [...this.#pointModel.points];
+    this.#boardOffers = [...this.#pointModel.offers];
+    this.#boardDestinations = [...this.#pointModel.destinations];
 
-    this.boardPoint = [...points];
-    render(this.sortListView, this.boardContainer);
-    render(this.weapointListView, this.boardContainer);
+    this.#renderBoard();
+  }
 
-    render(new EditPointView({
-      points: this.boardPoint[0],
-      offers: offers,
-      destinations: destinations
-    }), this.weapointListView.getElement());
+  #renderPoint({points, offers, destinations}) {
+    const escKeyDownHandler = (evt) => {
+      if (evt.key === 'Escape') {
+        evt.preventDefault();
+        replaceFormToCard();
+        document.removeEventListener('keydown', escKeyDownHandler);
+      }
+    };
 
-    for (let i = 1; i < this.boardPoint.length; i++) {
-      render(new WaypointView({
-        points: this.boardPoint[i],
-        offers: offers,
-        destinations: destinations
-      }), this.weapointListView.getElement());
+    const pointComponent = new WaypointView({
+      points,
+      offers,
+      destinations,
+      onEditClick: () => {
+        replaceCardToForm();
+        document.addEventListener('keydown', escKeyDownHandler);
+      }
+    });
+
+    const pointEditComponent = new EditPointView({
+      points,
+      offers,
+      destinations,
+      onRollupButtonClick: () => {
+        replaceFormToCard();
+        document.removeEventListener('keydown', escKeyDownHandler);
+      },
+      onFormSubmit: () => {
+        replaceFormToCard();
+        document.addEventListener('keydown', escKeyDownHandler);
+      }
+    });
+
+    function replaceCardToForm() {
+      replace(pointEditComponent, pointComponent);
+    }
+    function replaceFormToCard() {
+      replace(pointComponent, pointEditComponent);
     }
 
+    render(pointComponent, this.#weapointListView.element);
+  }
+
+  #renderBoard() {
+    if (this.#boardPoints.length === 0) {
+      render(new SystemMessageView({filterType: FilterType.EVERYTHING}), this.#boardContainer);
+      return;
+    }
+
+    render(this.#sortListView, this.#boardContainer);
+    render(this.#weapointListView, this.#boardContainer);
+
+    for (let i = 0; i < this.#boardPoints.length; i++) {
+      this.#renderPoint({
+        points: this.#boardPoints[i],
+        offers: this.#boardOffers,
+        destinations: this.#boardDestinations
+      });
+    }
   }
 }

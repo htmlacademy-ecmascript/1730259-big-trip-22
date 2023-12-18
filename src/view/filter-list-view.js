@@ -1,41 +1,37 @@
-import { DEFAULT_FILTER, FILTERS_TYPE } from '../const.js';
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
-function createFilterItemTemplate(type) {
-  const isChecked = DEFAULT_FILTER === type ? 'checked' : '';
+function createFilterItemTemplate(filter, isChecked) {
+  const {type, count} = filter;
 
   return (
     `<div class="trip-filters__filter">
-      <input id="filter-${type}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${type}" ${isChecked}>
+      <input id="filter-${type}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${type}"  ${isChecked ? 'checked' : ''} ${count === 0 ? 'disabled' : ''}>
       <label class="trip-filters__filter-label" for="filter-${type}">${type}</label>
     </div>`
   );
 }
 
-function createFilterListTemplate() {
+function createFilterListTemplate(filters) {
+  const filterItemsTemplate = filters.map((filter, index) => createFilterItemTemplate(filter, index === 0)).join('');
+
   return (
     `<form class="trip-filters" action="#" method="get">
-      ${FILTERS_TYPE.map((type) => createFilterItemTemplate(type)).join('')}
+      ${filterItemsTemplate}
 
       <button class="visually-hidden" type="submit">Accept filter</button>
     </form>`
   );
 }
 
-export default class FilterListView {
-  getTemplate() {
-    return createFilterListTemplate();
+export default class FilterListView extends AbstractView {
+  #filters = null;
+
+  constructor({filters}) {
+    super();
+    this.#filters = filters;
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
+  get template() {
+    return createFilterListTemplate(this.#filters);
   }
 }

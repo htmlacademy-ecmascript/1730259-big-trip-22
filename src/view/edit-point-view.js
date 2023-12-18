@@ -1,6 +1,6 @@
-import { DateFormat, POINTS_TYPE } from '../const.js';
-import {createElement} from '../render.js';
-import { capitalize, getElementById, getElementByType, humanizeTaskDueDate } from '../utils.js';
+import { DEFAULT_POINT, DateFormat, POINTS_TYPE } from '../const.js';
+import AbstractView from '../framework/view/abstract-view.js';
+import { capitalize, getElementById, getElementByType, humanizeTaskDueDate } from '../utils/utils.js';
 
 function createTypeTemplate(type, checkedType, id) {
   const isChecked = checkedType === type ? 'checked' : false;
@@ -65,9 +65,9 @@ function createPhotoContainerTemplate(pictures) {
 }
 
 function createDestinationTemplate(destination) {
-  const { description, pictures } = destination || {};
+  if (destination) {
+    const { description, pictures } = destination;
 
-  if (description.length > 0 || pictures.length > 0) {
     return (
       `<section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
@@ -85,7 +85,8 @@ function createEditPointTemplate(points, offers, destinations) {
   const { id, type, dateFrom, dateTo, basePrice, offers: checkedOffers, destination: pointDestination } = points;
   const filteredOfferByType = getElementByType(offers, type);
   const filteredDestinationById = getElementById(destinations, pointDestination);
-  const { name } = filteredDestinationById;
+
+  const { name } = filteredDestinationById || {name: ''};
 
   return (
     `
@@ -150,26 +151,37 @@ function createEditPointTemplate(points, offers, destinations) {
   );
 }
 
-export default class EditPointView {
-  constructor({points, offers, destinations}) {
-    this.points = points;
-    this.offers = offers;
-    this.destinations = destinations;
+export default class EditPointView extends AbstractView {
+  #points = null;
+  #offers = null;
+  #destinations = null;
+  #handleFormSubmit = null;
+  #handleRollupButtonClick = null;
+
+  constructor({points = DEFAULT_POINT, offers, destinations, onRollupButtonClick, onFormSubmit}) {
+    super();
+
+    this.#points = points;
+    this.#offers = offers;
+    this.#destinations = destinations;
+    this.#handleFormSubmit = onFormSubmit;
+    this.#handleRollupButtonClick = onRollupButtonClick;
+
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#RollupButtonClick);
+    this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
   }
 
-  getTemplate() {
-    return createEditPointTemplate(this.points, this.offers, this.destinations);
-  }
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormSubmit();
+  };
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
+  #RollupButtonClick = (evt) => {
+    evt.preventDefault();
+    this.#handleRollupButtonClick();
+  };
 
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
+  get template() {
+    return createEditPointTemplate(this.#points, this.#offers, this.#destinations);
   }
 }
