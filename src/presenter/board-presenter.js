@@ -53,7 +53,7 @@ export default class BoardPresenter {
       destinations,
       onRollupButtonClick: () => {
         replaceFormToCard();
-        document.addEventListener('keydown', escKeyDownHandler);
+        document.removeEventListener('keydown', escKeyDownHandler);
       },
       onFormSubmit: () => {
         replaceFormToCard();
