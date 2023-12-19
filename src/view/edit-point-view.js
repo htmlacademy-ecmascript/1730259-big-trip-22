@@ -1,6 +1,6 @@
 import { DEFAULT_POINT, DateFormat, POINTS_TYPE } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
-import { capitalize, getElementById, getElementByType, humanizeTaskDueDate } from '../utils/utils.js';
+import { capitalize, getElementById, getElementByType, humanizeTaskDueDate } from '../utils/common.js';
 
 function createTypeTemplate(type, checkedType, id) {
   const isChecked = checkedType === type ? 'checked' : false;
