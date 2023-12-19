@@ -29,7 +29,7 @@ function createOfferTemplate(offer, checkedOffers) {
   );
 }
 
-function createOfferListTemplate({offers}, checkedOffers) {
+function createOfferListTemplate(offers, checkedOffers) {
   if (offers.length !== 0) {
     return (
       `<section class="event__section  event__section--offers">
@@ -64,16 +64,26 @@ function createPhotoContainerTemplate(pictures) {
   return '';
 }
 
-function createDestinationTemplate(destination) {
-  if (destination) {
-    const { description, pictures } = destination;
-
+function createDestinationTemplate(description, pictures) {
+  if (description.length > 0 || pictures.length > 0) {
     return (
       `<section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
         <p class="event__destination-description">${description}</p>
-
         ${createPhotoContainerTemplate(pictures)}
+      </section>`
+    );
+  }
+
+  return '';
+}
+
+function createDetailsTemplate({offers}, checkedOffers, { description, pictures }) {
+  if (offers.length > 0 || description.length > 0 || pictures.length > 0) {
+    return (
+      `<section class="event__details">
+        ${createOfferListTemplate(offers, checkedOffers)}
+        ${createDestinationTemplate(description, pictures)}
       </section>`
     );
   }
@@ -141,10 +151,7 @@ function createEditPointTemplate(points, offers, destinations) {
               <span class="visually-hidden">Open event</span>
             </button>
           </header>
-          <section class="event__details">
-            ${createOfferListTemplate(filteredOfferByType, checkedOffers)}
-            ${createDestinationTemplate(filteredDestinationById)}
-          </section>
+          ${createDetailsTemplate(filteredOfferByType, checkedOffers, filteredDestinationById)}
         </form>
       </li>
     `

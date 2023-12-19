@@ -140,38 +140,7 @@ export const mockOffers = [
   },
   {
     type: 'ship',
-    offers: [
-      {
-        id: 'a3506d95-4022-4a8e-a438-7b793dc202a0',
-        title: 'Choose meal',
-        price: 186
-      },
-      {
-        id: '055ba681-0802-460d-8b60-9d222286bd59',
-        title: 'Choose seats',
-        price: 183
-      },
-      {
-        id: '3cb40b64-e480-4fff-9f18-8156e5c4e0de',
-        title: 'Upgrade to comfort class',
-        price: 123
-      },
-      {
-        id: '4aac35e9-e161-4da9-8c69-6fd2c40a465e',
-        title: 'Upgrade to business class',
-        price: 156
-      },
-      {
-        id: '81101dc4-8c37-48a4-8707-015ed5d84335',
-        title: 'Add luggage',
-        price: 107
-      },
-      {
-        id: '91bd7e2d-1e94-4ca9-afbd-3bc281c0ab83',
-        title: 'Business lounge',
-        price: 198
-      }
-    ]
+    offers: []
   },
   {
     type: 'drive',
