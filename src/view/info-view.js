@@ -1,5 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { getDestinationNames, getFullPrice, getMaxData, getMinData } from '../utils/common.js';
+import { getDestinationNames, getFullPrice } from '../utils/common.js';
+import { getMaxData, getMinData } from '../utils/date.js';
 
 function createTitle(points, destinations) {
   const filterPointsByNames = getDestinationNames(destinations, points);

@@ -1,5 +1,5 @@
 import { FilterType } from '../const';
-import { isPointFuture, isPointPast, isPointPastAndFuture } from './common';
+import { isPointFuture, isPointPast, isPointPastAndFuture } from './date';
 
 const filter = {
   [FilterType.EVERYTHING]: (points) => points,
@@ -8,4 +8,13 @@ const filter = {
   [FilterType.PAST]: (points) => points.filter((point) => isPointPast(point.dateTo)),
 };
 
-export { filter };
+function generateFilter(points) {
+  return Object.entries(filter).map(
+    ([filterType, filterPoints]) => ({
+      type: filterType,
+      count: filterPoints(points).length,
+    }),
+  );
+}
+
+export { filter, generateFilter };

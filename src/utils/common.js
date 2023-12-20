@@ -1,18 +1,3 @@
-import dayjs from 'dayjs';
-import minMax from 'dayjs/plugin/minMax';
-import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
-import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
-import {
-  DateFormat,
-  HOURS_IN_DAY,
-  MILLISECONDS_IN_MINUTES,
-  SECONDS_IN_MINUTES
-} from '../const';
-
-dayjs.extend(minMax);
-dayjs.extend(isSameOrBefore);
-dayjs.extend(isSameOrAfter);
-
 function getRandomArrayElement(items) {
   return items[Math.floor(Math.random() * items.length)];
 }
@@ -22,36 +7,7 @@ function getRandomNumber(number) {
   return Number(randomNumber);
 }
 
-function humanizeTaskDueDate(date, format) {
-  return date ? dayjs(date).format(format) : '';
-}
-
-function getDifferenceInTime(start, end) {
-  const difference = dayjs(end).diff(start) / MILLISECONDS_IN_MINUTES;
-
-  switch (difference) {
-    case difference < SECONDS_IN_MINUTES:
-      return dayjs(difference).format(DateFormat.MINUTES_WITH_POSTFIX);
-
-    case difference > SECONDS_IN_MINUTES && difference < SECONDS_IN_MINUTES * HOURS_IN_DAY:
-      return dayjs(difference).format(DateFormat.HOUR_MINUTES_WITH_POSTFIX);
-
-    default:
-      return dayjs(difference).format(DateFormat.DAY_HOUR_MINUTES_WITH_POSTFIX);
-  }
-}
-
-const getMinData = (items) => humanizeTaskDueDate(dayjs.min(items.map((item) => dayjs(item.dateFrom))), DateFormat.DAY_MONTH);
-
-const getMaxData = (items) => humanizeTaskDueDate(dayjs.max(items.map((item) => dayjs(item.dateTo))), DateFormat.DAY_MONTH);
-
 const capitalize = (item) => item.charAt(0).toUpperCase() + item.substring(1);
-
-const isPointFuture = (date) => date && dayjs().isAfter(date);
-
-const isPointPast = (date) => date && dayjs().isBefore(date);
-
-const isPointPastAndFuture = (dateFrom, dateTo) => dayjs().isSameOrBefore(dateFrom) && dayjs().isSameOrAfter(dateTo);
 
 const getDestinationNames = (destinations, points = undefined) => {
   if (points && points.length > 0) {
@@ -79,19 +35,15 @@ function getElementById(elements, itemsId) {
   return elements.find((element) => element.id === itemsId);
 }
 
+const isEscape = (evt) => evt.key === 'Escape';
+
 export {
   getRandomArrayElement,
   getRandomNumber,
-  humanizeTaskDueDate,
-  getDifferenceInTime,
-  getDestinationNames,
-  getMinData,
-  getMaxData,
   capitalize,
   getFullPrice,
   getElementByType,
   getElementById,
-  isPointFuture,
-  isPointPast,
-  isPointPastAndFuture,
+  getDestinationNames,
+  isEscape,
 };

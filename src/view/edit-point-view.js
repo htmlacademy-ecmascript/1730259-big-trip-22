@@ -1,6 +1,7 @@
 import { DEFAULT_POINT, DateFormat, POINTS_TYPE } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
-import { capitalize, getElementById, getElementByType, humanizeTaskDueDate } from '../utils/common.js';
+import { capitalize, getElementById, getElementByType } from '../utils/common.js';
+import { humanizeDate } from '../utils/date.js';
 
 function createTypeTemplate(type, checkedType, id) {
   const isChecked = checkedType === type ? 'checked' : false;
@@ -131,10 +132,10 @@ function createEditPointTemplate(points, offers, destinations) {
 
             <div class="event__field-group  event__field-group--time">
               <label class="visually-hidden" for="event-start-time-${id}">From</label>
-              <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value=${humanizeTaskDueDate(dateFrom, DateFormat.DAY_MONTH_YEAR)}>
+              <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value=${humanizeDate(dateFrom, DateFormat.DAY_MONTH_YEAR)}>
               &mdash;
               <label class="visually-hidden" for="event-end-time-${id}">To</label>
-              <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value=${humanizeTaskDueDate(dateTo, DateFormat.DAY_MONTH_YEAR)}>
+              <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value=${humanizeDate(dateTo, DateFormat.DAY_MONTH_YEAR)}>
             </div>
 
             <div class="event__field-group  event__field-group--price">
