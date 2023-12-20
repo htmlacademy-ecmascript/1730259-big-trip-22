@@ -10,13 +10,15 @@ function createSystemMessageTemplate(filterType) {
 export default class SystemMessageView extends AbstractView {
   #filterType = null;
 
-  constructor({filterType}) {
+  constructor() {
     super();
 
-    this.#filterType = filterType;
+    // this.#filterType = filterType;
+    // console.log(this.#filterType);
   }
 
   get template() {
+    // console.log(this.#filterType);
     return createSystemMessageTemplate(this.#filterType);
   }
 }

@@ -14,6 +14,7 @@ export default class BoardPresenter {
 
   #weapointListView = new WeapointListView();
   #sortListView = new SortListView();
+  #systemMessageView = new SystemMessageView();
 
   #boardPoints = [];
   #boardOffers = [];
@@ -85,13 +86,16 @@ export default class BoardPresenter {
     render(pointComponent, this.#weapointListView.element);
   }
 
-  #renderBoard() {
-    if (this.#boardPoints.length === 0) {
-      render(new SystemMessageView({ filterType: SystemMessageLoad.LOAD || FilterType.EVERYTHING }), this.#boardContainer);
-      return;
-    }
-
+  #renderSort() {
     render(this.#sortListView, this.#boardContainer);
+  }
+
+  #renderSystemMessage() {
+    console.log(this.#systemMessageView({filterType: SystemMessageLoad.LOAD || FilterType.EVERYTHING}).element);
+    render(this.#systemMessageView({filterType: SystemMessageLoad.LOAD || FilterType.EVERYTHING}), this.#boardContainer);
+  }
+
+  #renderPointsList() {
     render(this.#weapointListView, this.#boardContainer);
 
     for (let i = 0; i < this.#boardPoints.length; i++) {
@@ -101,5 +105,16 @@ export default class BoardPresenter {
         destinations: this.#boardDestinations
       });
     }
+  }
+
+  #renderBoard() {
+    this.#renderSystemMessage();
+    if (this.#boardPoints.length === 0) {
+      this.#renderSystemMessage();
+      return;
+    }
+
+    this.#renderSort();
+    this.#renderPointsList();
   }
 }
