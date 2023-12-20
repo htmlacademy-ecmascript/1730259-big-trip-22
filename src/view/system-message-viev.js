@@ -2,7 +2,7 @@ import { SystemMessageList } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
 function createSystemMessageTemplate(filterType) {
-  const message = filterType ? SystemMessageList[filterType] : 'Loading...';
+  const message = SystemMessageList[filterType];
 
   return `<p class="trip-events__msg">${message}</p>`;
 }

@@ -1,6 +1,7 @@
 import { DEFAULT_POINT, DateFormat, POINTS_TYPE } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
-import { capitalize, getElementById, getElementByType, humanizeTaskDueDate } from '../utils/utils.js';
+import { capitalize, getElementById, getElementByType } from '../utils/common.js';
+import { humanizeDate } from '../utils/date.js';
 
 function createTypeTemplate(type, checkedType, id) {
   const isChecked = checkedType === type ? 'checked' : false;
@@ -29,7 +30,7 @@ function createOfferTemplate(offer, checkedOffers) {
   );
 }
 
-function createOfferListTemplate({offers}, checkedOffers) {
+function createOfferListTemplate(offers, checkedOffers) {
   if (offers.length !== 0) {
     return (
       `<section class="event__section  event__section--offers">
@@ -64,16 +65,26 @@ function createPhotoContainerTemplate(pictures) {
   return '';
 }
 
-function createDestinationTemplate(destination) {
-  if (destination) {
-    const { description, pictures } = destination;
-
+function createDestinationTemplate(description, pictures) {
+  if (description.length > 0 || pictures.length > 0) {
     return (
       `<section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
         <p class="event__destination-description">${description}</p>
-
         ${createPhotoContainerTemplate(pictures)}
+      </section>`
+    );
+  }
+
+  return '';
+}
+
+function createDetailsTemplate({offers}, checkedOffers, { description, pictures }) {
+  if (offers.length > 0 || description.length > 0 || pictures.length > 0) {
+    return (
+      `<section class="event__details">
+        ${createOfferListTemplate(offers, checkedOffers)}
+        ${createDestinationTemplate(description, pictures)}
       </section>`
     );
   }
@@ -121,10 +132,10 @@ function createEditPointTemplate(points, offers, destinations) {
 
             <div class="event__field-group  event__field-group--time">
               <label class="visually-hidden" for="event-start-time-${id}">From</label>
-              <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value=${humanizeTaskDueDate(dateFrom, DateFormat.DAY_MONTH_YEAR)}>
+              <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value=${humanizeDate(dateFrom, DateFormat.DAY_MONTH_YEAR)}>
               &mdash;
               <label class="visually-hidden" for="event-end-time-${id}">To</label>
-              <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value=${humanizeTaskDueDate(dateTo, DateFormat.DAY_MONTH_YEAR)}>
+              <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value=${humanizeDate(dateTo, DateFormat.DAY_MONTH_YEAR)}>
             </div>
 
             <div class="event__field-group  event__field-group--price">
@@ -141,10 +152,7 @@ function createEditPointTemplate(points, offers, destinations) {
               <span class="visually-hidden">Open event</span>
             </button>
           </header>
-          <section class="event__details">
-            ${createOfferListTemplate(filteredOfferByType, checkedOffers)}
-            ${createDestinationTemplate(filteredDestinationById)}
-          </section>
+          ${createDetailsTemplate(filteredOfferByType, checkedOffers, filteredDestinationById)}
         </form>
       </li>
     `

@@ -130,25 +130,8 @@ export const mockDestinations = [
   },
   {
     id: '9dede120-f5d3-4e99-99ad-df12a2268571',
-    description: 'Tokio - with a beautiful old town',
+    description: '',
     name: 'Tokio',
-    pictures: [
-      {
-        src: 'https://22.objects.htmlacademy.pro/static/destinations/17.jpg',
-        description: 'Tokio a true asian pearl'
-      },
-      {
-        src: 'https://22.objects.htmlacademy.pro/static/destinations/5.jpg',
-        description: 'Tokio with an embankment of a mighty river as a centre of attraction'
-      },
-      {
-        src: 'https://22.objects.htmlacademy.pro/static/destinations/20.jpg',
-        description: 'Tokio middle-eastern paradise'
-      },
-      {
-        src: 'https://22.objects.htmlacademy.pro/static/destinations/4.jpg',
-        description: 'Tokio for those who value comfort and coziness'
-      }
-    ]
+    pictures: []
   }
 ];

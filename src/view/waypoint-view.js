@@ -1,6 +1,7 @@
 import { DateFormat } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
-import { getDifferenceInTime, getElementById, getElementByType, humanizeTaskDueDate } from '../utils/utils.js';
+import { getElementById, getElementByType } from '../utils/common.js';
+import { humanizeDate, getDifferenceInTime } from '../utils/date.js';
 
 function createOfferTemplate({title, price}) {
   return (
@@ -22,16 +23,16 @@ function createWaypointTemplate(points, offers, destinations) {
     `
       <li class="trip-events__item">
         <div class="event">
-          <time class="event__date" datetime=${dateFrom}>${humanizeTaskDueDate(dateFrom, DateFormat.MONTH_DAY)}</time>
+          <time class="event__date" datetime=${dateFrom}>${humanizeDate(dateFrom, DateFormat.MONTH_DAY)}</time>
           <div class="event__type">
             <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
           </div>
           <h3 class="event__title">${type} ${name}</h3>
           <div class="event__schedule">
             <p class="event__time">
-              <time class="event__start-time" datetime=${dateFrom}>${humanizeTaskDueDate(dateFrom, DateFormat.HOUR_MINUTES)}</time>
+              <time class="event__start-time" datetime=${dateFrom}>${humanizeDate(dateFrom, DateFormat.HOUR_MINUTES)}</time>
               &mdash;
-              <time class="event__end-time" datetime=${dateTo}>${humanizeTaskDueDate(dateTo, DateFormat.HOUR_MINUTES)}</time>
+              <time class="event__end-time" datetime=${dateTo}>${humanizeDate(dateTo, DateFormat.HOUR_MINUTES)}</time>
             </p>
             <p class="event__duration">${getDifferenceInTime(dateFrom, dateTo)}</p>
           </div>

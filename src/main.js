@@ -1,8 +1,8 @@
-import { generateFilter } from './mock/filter.js';
 import PointModel from './model/points-model.js';
 import BoardPresenter from './presenter/board-presenter.js';
 import FilterPresenter from './presenter/filter-presenter.js';
 import InfoPresenter from './presenter/info-presenter.js';
+import { generateFilter } from './utils/filter.js';
 
 const header = document.querySelector('.page-header');
 const infoHeader = header.querySelector('.trip-main');

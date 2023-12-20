@@ -4,7 +4,8 @@ import WeapointListView from '../view/waypoint-list-view';
 import EditPointView from '../view/edit-point-view';
 import WaypointView from '../view/waypoint-view';
 import SortListView from '../view/sort-list-view';
-import { FilterType } from '../const';
+import { FilterType, SystemMessageLoad } from '../const';
+import { isEscape } from '../utils/common';
 
 
 export default class BoardPresenter {
@@ -33,7 +34,7 @@ export default class BoardPresenter {
 
   #renderPoint({points, offers, destinations}) {
     const escKeyDownHandler = (evt) => {
-      if (evt.key === 'Escape') {
+      if (isEscape(evt)) {
         evt.preventDefault();
         replaceFormToCard();
         document.removeEventListener('keydown', escKeyDownHandler);
@@ -45,8 +46,7 @@ export default class BoardPresenter {
       offers,
       destinations,
       onEditClick: () => {
-        replaceCardToForm();
-        document.addEventListener('keydown', escKeyDownHandler);
+        showCardEdit();
       }
     });
 
@@ -55,20 +55,31 @@ export default class BoardPresenter {
       offers,
       destinations,
       onRollupButtonClick: () => {
-        replaceFormToCard();
-        document.removeEventListener('keydown', escKeyDownHandler);
+        hideCardEdit();
       },
       onFormSubmit: () => {
-        replaceFormToCard();
-        document.addEventListener('keydown', escKeyDownHandler);
+        hideCardEdit();
       }
     });
+
+    //TODO нужно ли тут все эти функции сделать приватными?
 
     function replaceCardToForm() {
       replace(pointEditComponent, pointComponent);
     }
+
     function replaceFormToCard() {
       replace(pointComponent, pointEditComponent);
+    }
+
+    function showCardEdit() {
+      replaceCardToForm();
+      document.addEventListener('keydown', escKeyDownHandler);
+    }
+
+    function hideCardEdit() {
+      replaceFormToCard();
+      document.addEventListener('keydown', escKeyDownHandler);
     }
 
     render(pointComponent, this.#weapointListView.element);
@@ -76,7 +87,7 @@ export default class BoardPresenter {
 
   #renderBoard() {
     if (this.#boardPoints.length === 0) {
-      render(new SystemMessageView({filterType: FilterType.EVERYTHING}), this.#boardContainer);
+      render(new SystemMessageView({ filterType: SystemMessageLoad.LOAD || FilterType.EVERYTHING }), this.#boardContainer);
       return;
     }
 
