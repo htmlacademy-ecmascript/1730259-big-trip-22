@@ -1,11 +1,9 @@
-import { render, replace } from '../framework/render';
+import { render } from '../framework/render';
 import SystemMessageView from '../view/system-message-viev';
 import WeapointListView from '../view/waypoint-list-view';
-import EditPointView from '../view/edit-point-view';
-import WaypointView from '../view/waypoint-view';
 import SortListView from '../view/sort-list-view';
-import { FilterType, SystemMessageLoad } from '../const';
-import { isEscape } from '../utils/common';
+import { FilterType } from '../const';
+import PointPresenter from './point-presenter';
 
 
 export default class BoardPresenter {
@@ -14,7 +12,6 @@ export default class BoardPresenter {
 
   #weapointListView = new WeapointListView();
   #sortListView = new SortListView();
-  #systemMessageView = new SystemMessageView();
 
   #boardPoints = [];
   #boardOffers = [];
@@ -33,66 +30,19 @@ export default class BoardPresenter {
     this.#renderBoard();
   }
 
-  #renderPoint({points, offers, destinations}) {
-    const escKeyDownHandler = (evt) => {
-      if (isEscape(evt)) {
-        evt.preventDefault();
-        replaceFormToCard();
-        document.removeEventListener('keydown', escKeyDownHandler);
-      }
-    };
+  #renderPoint({point, offers, destinations}) {
+    const pointPresenter = new PointPresenter({pointListContainer: this.#weapointListView.element});
 
-    const pointComponent = new WaypointView({
-      points,
-      offers,
-      destinations,
-      onEditClick: () => {
-        showCardEdit();
-      }
-    });
-
-    const pointEditComponent = new EditPointView({
-      points,
-      offers,
-      destinations,
-      onRollupButtonClick: () => {
-        hideCardEdit();
-      },
-      onFormSubmit: () => {
-        hideCardEdit();
-      }
-    });
-
-    //TODO нужно ли тут все эти функции сделать приватными?
-
-    function replaceCardToForm() {
-      replace(pointEditComponent, pointComponent);
-    }
-
-    function replaceFormToCard() {
-      replace(pointComponent, pointEditComponent);
-    }
-
-    function showCardEdit() {
-      replaceCardToForm();
-      document.addEventListener('keydown', escKeyDownHandler);
-    }
-
-    function hideCardEdit() {
-      replaceFormToCard();
-      document.addEventListener('keydown', escKeyDownHandler);
-    }
-
-    render(pointComponent, this.#weapointListView.element);
+    pointPresenter.init(point, offers, destinations);
   }
 
   #renderSort() {
     render(this.#sortListView, this.#boardContainer);
   }
 
-  #renderSystemMessage() {
-    console.log(this.#systemMessageView({filterType: SystemMessageLoad.LOAD || FilterType.EVERYTHING}).element);
-    render(this.#systemMessageView({filterType: SystemMessageLoad.LOAD || FilterType.EVERYTHING}), this.#boardContainer);
+  #renderSystemMessage({message}) {
+    //TODO Не понятно почему тут надо делать через нью и нельзя вызвать зарание и записать
+    render(new SystemMessageView({messageType: message}), this.#boardContainer);
   }
 
   #renderPointsList() {
@@ -100,7 +50,7 @@ export default class BoardPresenter {
 
     for (let i = 0; i < this.#boardPoints.length; i++) {
       this.#renderPoint({
-        points: this.#boardPoints[i],
+        point: this.#boardPoints[i],
         offers: this.#boardOffers,
         destinations: this.#boardDestinations
       });
@@ -108,9 +58,8 @@ export default class BoardPresenter {
   }
 
   #renderBoard() {
-    this.#renderSystemMessage();
     if (this.#boardPoints.length === 0) {
-      this.#renderSystemMessage();
+      this.#renderSystemMessage({message: FilterType.EVERYTHING});
       return;
     }
 

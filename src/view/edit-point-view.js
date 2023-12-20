@@ -92,8 +92,8 @@ function createDetailsTemplate({offers}, checkedOffers, { description, pictures 
   return '';
 }
 
-function createEditPointTemplate(points, offers, destinations) {
-  const { id, type, dateFrom, dateTo, basePrice, offers: checkedOffers, destination: pointDestination } = points;
+function createEditPointTemplate(point, offers, destinations) {
+  const { id, type, dateFrom, dateTo, basePrice, offers: checkedOffers, destination: pointDestination } = point;
   const filteredOfferByType = getElementByType(offers, type);
   const filteredDestinationById = getElementById(destinations, pointDestination);
 
@@ -160,16 +160,16 @@ function createEditPointTemplate(points, offers, destinations) {
 }
 
 export default class EditPointView extends AbstractView {
-  #points = null;
+  #point = null;
   #offers = null;
   #destinations = null;
   #handleFormSubmit = null;
   #handleRollupButtonClick = null;
 
-  constructor({points = DEFAULT_POINT, offers, destinations, onRollupButtonClick, onFormSubmit}) {
+  constructor({point = DEFAULT_POINT, offers, destinations, onRollupButtonClick, onFormSubmit}) {
     super();
 
-    this.#points = points;
+    this.#point = point;
     this.#offers = offers;
     this.#destinations = destinations;
     this.#handleFormSubmit = onFormSubmit;
@@ -190,6 +190,6 @@ export default class EditPointView extends AbstractView {
   };
 
   get template() {
-    return createEditPointTemplate(this.#points, this.#offers, this.#destinations);
+    return createEditPointTemplate(this.#point, this.#offers, this.#destinations);
   }
 }
