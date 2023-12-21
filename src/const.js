@@ -59,6 +59,11 @@ const DEFAULT_POINT = {
   type: 'flight',
 };
 
+const Mode = {
+  DEFAULT: 'default',
+  EDITING: 'editing'
+};
+
 export {
   POINT_COUNT,
   MILLISECONDS_IN_MINUTES,
@@ -72,4 +77,5 @@ export {
   DEFAULT_POINT,
   SystemMessageList,
   SystemMessageLoad,
+  Mode,
 };

@@ -4,18 +4,22 @@ import WeapointListView from '../view/waypoint-list-view';
 import SortListView from '../view/sort-list-view';
 import { FilterType } from '../const';
 import PointPresenter from './point-presenter';
+import { updateItem } from '../utils/common';
 
 
 export default class BoardPresenter {
   #boardContainer = null;
   #pointModel = null;
+  #systemMessageComponent = null;
 
-  #weapointListView = new WeapointListView();
   #sortListView = new SortListView();
+  #weapointListView = new WeapointListView();
 
   #boardPoints = [];
   #boardOffers = [];
   #boardDestinations = [];
+
+  #pointPresenters = new Map();
 
   constructor({boardContainer, pointModel}) {
     this.#boardContainer = boardContainer;
@@ -31,18 +35,39 @@ export default class BoardPresenter {
   }
 
   #renderPoint({point, offers, destinations}) {
-    const pointPresenter = new PointPresenter({pointListContainer: this.#weapointListView.element});
+    const pointPresenter = new PointPresenter({
+      pointListContainer: this.#weapointListView.element,
+      onDataChange: this.#handlePointChange,
+      onModeChange: this.#handleModeChange
+    });
 
     pointPresenter.init(point, offers, destinations);
+
+    this.#pointPresenters.set(point.id, pointPresenter);
   }
+
+  #handlePointChange = (updatedPoint) => {
+    this.#boardPoints = updateItem(this.#boardPoints, updatedPoint);
+    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint, this.#boardOffers, this.#boardDestinations);
+  };
+
+  #handleModeChange = () => {
+    this.#pointPresenters.forEach((pointPresenter) => pointPresenter.resetView());
+  };
 
   #renderSort() {
     render(this.#sortListView, this.#boardContainer);
   }
 
   #renderSystemMessage({message}) {
-    //TODO Не понятно почему тут надо делать через нью и нельзя вызвать зарание и записать
-    render(new SystemMessageView({messageType: message}), this.#boardContainer);
+    this.#systemMessageComponent = new SystemMessageView({messageType: message});
+
+    render(this.#systemMessageComponent, this.#boardContainer);
+  }
+
+  #clearPointList() {
+    this.#pointPresenters.forEach((presenter) => presenter.destroy());
+    this.#pointPresenters.clear();
   }
 
   #renderPointsList() {

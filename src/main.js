@@ -21,7 +21,10 @@ const infoPresenter = new InfoPresenter({
   pointModel
 });
 
-const filterPresenter = new FilterPresenter({filterConteiner: headerFilterElement, filters});
+const filterPresenter = new FilterPresenter({
+  filterConteiner: headerFilterElement,
+  filters
+});
 
 const boardPresenter = new BoardPresenter({
   boardContainer: containerElement,
