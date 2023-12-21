@@ -46,6 +46,14 @@ const SORT_TYPE = ['day', 'event', 'time', 'price', 'offers'];
 
 const DEFAULT_SORT = SORT_TYPE[0];
 
+const SortType = {
+  DAY: 'day',
+  EVENT: 'event',
+  TIME: 'time',
+  PRICE: 'price',
+  OFFERS: 'offers',
+};
+
 const POINTS_TYPE = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 
 const DEFAULT_POINT = {
@@ -72,6 +80,7 @@ export {
   DateFormat,
   FilterType,
   SORT_TYPE,
+  SortType,
   DEFAULT_SORT,
   POINTS_TYPE,
   DEFAULT_POINT,
