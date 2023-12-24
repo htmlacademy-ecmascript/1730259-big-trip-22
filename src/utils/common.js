@@ -37,6 +37,10 @@ function getElementById(elements, itemsId) {
 
 const isEscape = (evt) => evt.key === 'Escape';
 
+function updateItem(items, update) {
+  return items.map((item) => item.id === update.id ? update : item);
+}
+
 export {
   getRandomArrayElement,
   getRandomNumber,
@@ -46,4 +50,5 @@ export {
   getElementById,
   getDestinationNames,
   isEscape,
+  updateItem,
 };

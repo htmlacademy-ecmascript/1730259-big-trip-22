@@ -1,23 +1,25 @@
-import { render, replace } from '../framework/render';
+import { render } from '../framework/render';
 import SystemMessageView from '../view/system-message-viev';
 import WeapointListView from '../view/waypoint-list-view';
-import EditPointView from '../view/edit-point-view';
-import WaypointView from '../view/waypoint-view';
 import SortListView from '../view/sort-list-view';
-import { FilterType, SystemMessageLoad } from '../const';
-import { isEscape } from '../utils/common';
+import { FilterType } from '../const';
+import PointPresenter from './point-presenter';
+import { updateItem } from '../utils/common';
 
 
 export default class BoardPresenter {
   #boardContainer = null;
   #pointModel = null;
+  #systemMessageComponent = null;
 
-  #weapointListView = new WeapointListView();
   #sortListView = new SortListView();
+  #weapointListView = new WeapointListView();
 
   #boardPoints = [];
   #boardOffers = [];
   #boardDestinations = [];
+
+  #pointPresenters = new Map();
 
   constructor({boardContainer, pointModel}) {
     this.#boardContainer = boardContainer;
@@ -32,74 +34,61 @@ export default class BoardPresenter {
     this.#renderBoard();
   }
 
-  #renderPoint({points, offers, destinations}) {
-    const escKeyDownHandler = (evt) => {
-      if (isEscape(evt)) {
-        evt.preventDefault();
-        replaceFormToCard();
-        document.removeEventListener('keydown', escKeyDownHandler);
-      }
-    };
-
-    const pointComponent = new WaypointView({
-      points,
-      offers,
-      destinations,
-      onEditClick: () => {
-        showCardEdit();
-      }
+  #renderPoint({point, offers, destinations}) {
+    const pointPresenter = new PointPresenter({
+      pointListContainer: this.#weapointListView.element,
+      onDataChange: this.#handlePointChange,
+      onModeChange: this.#handleModeChange
     });
 
-    const pointEditComponent = new EditPointView({
-      points,
-      offers,
-      destinations,
-      onRollupButtonClick: () => {
-        hideCardEdit();
-      },
-      onFormSubmit: () => {
-        hideCardEdit();
-      }
-    });
+    pointPresenter.init(point, offers, destinations);
 
-    //TODO нужно ли тут все эти функции сделать приватными?
-
-    function replaceCardToForm() {
-      replace(pointEditComponent, pointComponent);
-    }
-
-    function replaceFormToCard() {
-      replace(pointComponent, pointEditComponent);
-    }
-
-    function showCardEdit() {
-      replaceCardToForm();
-      document.addEventListener('keydown', escKeyDownHandler);
-    }
-
-    function hideCardEdit() {
-      replaceFormToCard();
-      document.addEventListener('keydown', escKeyDownHandler);
-    }
-
-    render(pointComponent, this.#weapointListView.element);
+    this.#pointPresenters.set(point.id, pointPresenter);
   }
 
-  #renderBoard() {
-    if (this.#boardPoints.length === 0) {
-      render(new SystemMessageView({ filterType: SystemMessageLoad.LOAD || FilterType.EVERYTHING }), this.#boardContainer);
-      return;
-    }
+  #handlePointChange = (updatedPoint) => {
+    this.#boardPoints = updateItem(this.#boardPoints, updatedPoint);
+    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint, this.#boardOffers, this.#boardDestinations);
+  };
 
+  #handleModeChange = () => {
+    this.#pointPresenters.forEach((pointPresenter) => pointPresenter.resetView());
+  };
+
+  #renderSort() {
     render(this.#sortListView, this.#boardContainer);
+  }
+
+  #renderSystemMessage({message}) {
+    this.#systemMessageComponent = new SystemMessageView({messageType: message});
+
+    render(this.#systemMessageComponent, this.#boardContainer);
+  }
+
+  #clearPointList() {
+    this.#pointPresenters.forEach((presenter) => presenter.destroy());
+    this.#pointPresenters.clear();
+  }
+
+  #renderPointsList() {
     render(this.#weapointListView, this.#boardContainer);
 
     for (let i = 0; i < this.#boardPoints.length; i++) {
       this.#renderPoint({
-        points: this.#boardPoints[i],
+        point: this.#boardPoints[i],
         offers: this.#boardOffers,
         destinations: this.#boardDestinations
       });
     }
+  }
+
+  #renderBoard() {
+    if (this.#boardPoints.length === 0) {
+      this.#renderSystemMessage({message: FilterType.EVERYTHING});
+      return;
+    }
+
+    this.#renderSort();
+    this.#renderPointsList();
   }
 }
