@@ -2,11 +2,8 @@ import dayjs from 'dayjs';
 
 const POINT_COUNT = 4;
 
-const MILLISECONDS_IN_MINUTES = 60000;
-
-const SECONDS_IN_MINUTES = 60;
-
-const HOURS_IN_DAY = 24;
+const MILLISECONDS_IN_HOUR = 3600000;
+const MILLISECONDS_IN_DAY = 86400000;
 
 const DateFormat = {
   // DATETIME_ATTRIBUTE: 'YYYY-MM-DDTHH:mm',
@@ -42,10 +39,6 @@ const SystemMessageList = {
   [SystemMessageLoad.FAILED_LOAD]: 'Failed to load latest route information',
 };
 
-const SORT_TYPE = ['day', 'event', 'time', 'price', 'offers'];
-
-const DEFAULT_SORT = SORT_TYPE[0];
-
 const SortType = {
   DAY: 'day',
   EVENT: 'event',
@@ -74,14 +67,11 @@ const Mode = {
 
 export {
   POINT_COUNT,
-  MILLISECONDS_IN_MINUTES,
-  SECONDS_IN_MINUTES,
-  HOURS_IN_DAY,
+  MILLISECONDS_IN_HOUR,
+  MILLISECONDS_IN_DAY,
   DateFormat,
   FilterType,
-  SORT_TYPE,
   SortType,
-  DEFAULT_SORT,
   POINTS_TYPE,
   DEFAULT_POINT,
   SystemMessageList,

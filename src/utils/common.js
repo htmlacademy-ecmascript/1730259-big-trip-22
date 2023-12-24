@@ -41,6 +41,8 @@ function updateItem(items, update) {
   return items.map((item) => item.id === update.id ? update : item);
 }
 
+const sortByPrice = (a, b) => b.basePrice - a.basePrice;
+
 export {
   getRandomArrayElement,
   getRandomNumber,
@@ -51,4 +53,5 @@ export {
   getDestinationNames,
   isEscape,
   updateItem,
+  sortByPrice,
 };

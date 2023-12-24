@@ -2,20 +2,22 @@ import { render } from '../framework/render';
 import SystemMessageView from '../view/system-message-viev';
 import WeapointListView from '../view/waypoint-list-view';
 import SortListView from '../view/sort-list-view';
-import { FilterType } from '../const';
+import { FilterType, SortType } from '../const';
 import PointPresenter from './point-presenter';
-import { updateItem } from '../utils/common';
+import { sortByPrice, updateItem } from '../utils/common';
+import { sortByTime } from '../utils/date';
 
 
 export default class BoardPresenter {
   #boardContainer = null;
   #pointModel = null;
   #systemMessageComponent = null;
+  #sortListView = null;
 
-  #sortListView = new SortListView();
   #weapointListView = new WeapointListView();
 
   #boardPoints = [];
+  #originalPoints = [];
   #boardOffers = [];
   #boardDestinations = [];
 
@@ -28,6 +30,7 @@ export default class BoardPresenter {
 
   init() {
     this.#boardPoints = [...this.#pointModel.points];
+    this.#originalPoints = [...this.#pointModel.points];
     this.#boardOffers = [...this.#pointModel.offers];
     this.#boardDestinations = [...this.#pointModel.destinations];
 
@@ -55,7 +58,28 @@ export default class BoardPresenter {
     this.#pointPresenters.forEach((pointPresenter) => pointPresenter.resetView());
   };
 
+  #sortPoints(sortType) {
+    switch (sortType) {
+      case SortType.TIME:
+        this.#boardPoints.sort(sortByTime);
+        break;
+      case SortType.PRICE:
+        this.#boardPoints.sort(sortByPrice);
+        break;
+      default:
+        this.#boardPoints = [...this.#originalPoints];
+    }
+  }
+
+  #handleSortTypeChange = (sortType) => {
+    this.#sortPoints(sortType);
+    this.#clearPointList();
+    this. #renderPointsList();
+  };
+
   #renderSort() {
+    this.#sortListView = new SortListView({ onSortTypeChange: this.#handleSortTypeChange});
+
     render(this.#sortListView, this.#boardContainer);
   }
 
