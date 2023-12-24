@@ -12,8 +12,6 @@ export default class PointPresenter {
   #handleDataChange = null;
   #handleModeChange = null;
 
-  // TODO еще раз уточнить про данные можно ли нал или надо ставить массив
-
   #point = null;
   #offers = null;
   #destinations = null;
@@ -101,7 +99,6 @@ export default class PointPresenter {
     this.#handleDataChange(point);
     this.#replaceFormToCard();
   };
-  // TODO уточнить можно ли так повторится, вроде логика будет отличатся
 
   #hideCardEdit = () => {
     this.#replaceFormToCard();
