@@ -21,8 +21,6 @@ function createSortListTemplate() {
   );
 }
 
-// TODO (evt) => console.log(evt.target.id.match(/-(\w+)/)[1])
-
 export default class SortListView extends AbstractView {
   #handleSortTypeChange = null;
 
@@ -40,6 +38,11 @@ export default class SortListView extends AbstractView {
 
   #sortTypeChangeHandler = (evt) => {
     evt.preventDefault();
+
+    if (evt.target.tagName !== 'INPUT') {
+      return;
+    }
+
     this.#handleSortTypeChange(evt.target.id.match(/-(\w+)/)[1]);
   };
 }
