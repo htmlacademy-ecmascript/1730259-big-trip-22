@@ -1,5 +1,5 @@
 import { DEFAULT_POINT, DateFormat, POINTS_TYPE } from '../const.js';
-import AbstractView from '../framework/view/abstract-view.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { capitalize, getElementById, getElementByType } from '../utils/common.js';
 import { humanizeDate } from '../utils/date.js';
 
@@ -159,8 +159,7 @@ function createEditPointTemplate(point, offers, destinations) {
   );
 }
 
-export default class EditPointView extends AbstractView {
-  #point = null;
+export default class EditPointView extends AbstractStatefulView {
   #offers = null;
   #destinations = null;
   #handleFormSubmit = null;
@@ -169,7 +168,7 @@ export default class EditPointView extends AbstractView {
   constructor({point = DEFAULT_POINT, offers, destinations, onRollupButtonClick, onFormSubmit}) {
     super();
 
-    this.#point = point;
+    this._setState(EditPointView.parsePointToState(point));
     this.#offers = offers;
     this.#destinations = destinations;
     this.#handleFormSubmit = onFormSubmit;
@@ -181,7 +180,7 @@ export default class EditPointView extends AbstractView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFormSubmit(this.#point);
+    this.#handleFormSubmit(this._state);
   };
 
   #RollupButtonClick = (evt) => {
@@ -189,7 +188,11 @@ export default class EditPointView extends AbstractView {
     this.#handleRollupButtonClick();
   };
 
+  static parsePointToState(point) {
+    return {...point};
+  }
+
   get template() {
-    return createEditPointTemplate(this.#point, this.#offers, this.#destinations);
+    return createEditPointTemplate(this._state, this.#offers, this.#destinations);
   }
 }
