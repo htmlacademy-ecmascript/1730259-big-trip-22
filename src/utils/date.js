@@ -21,18 +21,16 @@ function humanizeDate(date, format) {
 function getDifferenceInTime(start, end) {
   const difference = dayjs(end).diff(start);
 
-  if (difference < MILLISECONDS_IN_HOUR) {
-    return dayjs(difference).format(DateFormat.MINUTES_WITH_POSTFIX);
-  }
+  switch (true) {
+    case difference < MILLISECONDS_IN_HOUR:
+      return dayjs(difference).format(DateFormat.MINUTES_WITH_POSTFIX);
 
-  if (difference > MILLISECONDS_IN_HOUR && difference < MILLISECONDS_IN_DAY) {
-    return dayjs(difference).format(DateFormat.HOUR_MINUTES_WITH_POSTFIX);
-  }
+    case difference > MILLISECONDS_IN_HOUR && difference < MILLISECONDS_IN_DAY:
+      return dayjs(difference).format(DateFormat.HOUR_MINUTES_WITH_POSTFIX);
 
-  if (difference > MILLISECONDS_IN_DAY) {
-    return dayjs(difference).format(DateFormat.DAY_HOUR_MINUTES_WITH_POSTFIX);
+    case difference > MILLISECONDS_IN_DAY:
+      return dayjs(difference).format(DateFormat.DAY_HOUR_MINUTES_WITH_POSTFIX);
   }
-
 }
 
 const getMinData = (items) => humanizeDate(dayjs.min(items.map((item) => dayjs(item.dateFrom))), DateFormat.DAY_MONTH);

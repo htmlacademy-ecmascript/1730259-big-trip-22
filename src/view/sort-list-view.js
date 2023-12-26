@@ -1,4 +1,4 @@
-import { SortType } from '../const.js';
+import { REG_EXP_SORT, SortType } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
 function createSortItemTemplate(type) {
@@ -39,10 +39,8 @@ export default class SortListView extends AbstractView {
   #sortTypeChangeHandler = (evt) => {
     evt.preventDefault();
 
-    if (evt.target.tagName !== 'INPUT') {
-      return;
-    }
+    const targetType = evt.target.id.match(REG_EXP_SORT) ? evt.target.id.match(REG_EXP_SORT)[1] : '';
 
-    this.#handleSortTypeChange(evt.target.id.match(/-(\w+)/)[1]);
+    this.#handleSortTypeChange(targetType);
   };
 }

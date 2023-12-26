@@ -65,6 +65,8 @@ const Mode = {
   EDITING: 'editing'
 };
 
+const REG_EXP_SORT = /-(\w+)/;
+
 export {
   POINT_COUNT,
   MILLISECONDS_IN_HOUR,
@@ -77,4 +79,5 @@ export {
   SystemMessageList,
   SystemMessageLoad,
   Mode,
+  REG_EXP_SORT,
 };
