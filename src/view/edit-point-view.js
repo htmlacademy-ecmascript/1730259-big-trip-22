@@ -174,8 +174,7 @@ export default class EditPointView extends AbstractStatefulView {
     this.#handleFormSubmit = onFormSubmit;
     this.#handleRollupButtonClick = onRollupButtonClick;
 
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#RollupButtonClick);
-    this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
+    this._restoreHandlers();
   }
 
   #formSubmitHandler = (evt) => {
@@ -187,6 +186,34 @@ export default class EditPointView extends AbstractStatefulView {
     evt.preventDefault();
     this.#handleRollupButtonClick();
   };
+
+  #changeTypeHandler = (evt) => {
+    evt.preventDefault();
+
+    this.updateElement({
+      type: evt.target.value
+    });
+  };
+
+  #cityInputHandler = (evt) => {
+    this.updateElement({
+      destination: this.#destinations.find((destination) => destination.name === evt.target.value).id,
+    });
+  };
+
+  #changeOfferCheckedHandler = () => {
+    const checkedOffers = Array.from(this.element.querySelectorAll('.event__offer-checkbox:checked'));
+
+    console.log(checkedOffers);
+  };
+
+  _restoreHandlers() {
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#RollupButtonClick);
+    this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
+    this.element.querySelector('.event__type-group').addEventListener('change', this.#changeTypeHandler);
+    this.element.querySelector('.event__input--destination').addEventListener('change', this.#cityInputHandler);
+    this.element.querySelector('.event__available-offers')?.addEventListener('change',this.#changeOfferCheckedHandler);
+  }
 
   static parsePointToState(point) {
     return {...point};
