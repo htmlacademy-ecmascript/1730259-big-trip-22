@@ -100,62 +100,60 @@ function createEditPointTemplate(point, offers, destinations) {
   const { name } = filteredDestinationById || {name: ''};
 
   return (
-    `
-      <li class="trip-events__item">
-        <form class="event event--edit" action="#" method="post">
-          <header class="event__header">
-            <div class="event__type-wrapper">
-              <label class="event__type  event__type-btn" for="event-type-toggle-${id}">
-                <span class="visually-hidden">Choose event type</span>
-                <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
-              </label>
-              <input class="event__type-toggle  visually-hidden" id="event-type-toggle-${id}" type="checkbox">
+    `<li class="trip-events__item">
+      <form class="event event--edit" action="#" method="post">
+        <header class="event__header">
+          <div class="event__type-wrapper">
+            <label class="event__type  event__type-btn" for="event-type-toggle-${id}">
+              <span class="visually-hidden">Choose event type</span>
+              <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
+            </label>
+            <input class="event__type-toggle  visually-hidden" id="event-type-toggle-${id}" type="checkbox">
 
-              <div class="event__type-list">
-                <fieldset class="event__type-group">
-                  <legend class="visually-hidden">Event type</legend>
+            <div class="event__type-list">
+              <fieldset class="event__type-group">
+                <legend class="visually-hidden">Event type</legend>
 
-                  ${POINTS_TYPE.map((item) => createTypeTemplate(item, type, id)).join('')}
-                </fieldset>
-              </div>
+                ${POINTS_TYPE.map((item) => createTypeTemplate(item, type, id)).join('')}
+              </fieldset>
             </div>
+          </div>
 
-            <div class="event__field-group  event__field-group--destination">
-              <label class="event__label  event__type-output" for="event-destination-${id}">
-                ${type}
-              </label>
-              <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value='${name}' list="destination-list-${id}">
-              <datalist id="destination-list-${id}">
-                ${destinations.map((item) => `<option value=${item.name}></option>`)}
-              </datalist>
-            </div>
+          <div class="event__field-group  event__field-group--destination">
+            <label class="event__label  event__type-output" for="event-destination-${id}">
+              ${type}
+            </label>
+            <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value='${name}' list="destination-list-${id}">
+            <datalist id="destination-list-${id}">
+              ${destinations.map((item) => `<option value=${item.name}></option>`)}
+            </datalist>
+          </div>
 
-            <div class="event__field-group  event__field-group--time">
-              <label class="visually-hidden" for="event-start-time-${id}">From</label>
-              <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value=${humanizeDate(dateFrom, DateFormat.DAY_MONTH_YEAR)}>
-              &mdash;
-              <label class="visually-hidden" for="event-end-time-${id}">To</label>
-              <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value=${humanizeDate(dateTo, DateFormat.DAY_MONTH_YEAR)}>
-            </div>
+          <div class="event__field-group  event__field-group--time">
+            <label class="visually-hidden" for="event-start-time-${id}">From</label>
+            <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value=${humanizeDate(dateFrom, DateFormat.DAY_MONTH_YEAR)}>
+            &mdash;
+            <label class="visually-hidden" for="event-end-time-${id}">To</label>
+            <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value=${humanizeDate(dateTo, DateFormat.DAY_MONTH_YEAR)}>
+          </div>
 
-            <div class="event__field-group  event__field-group--price">
-              <label class="event__label" for="event-price-${id}">
-                <span class="visually-hidden">Price</span>
-                &euro;
-              </label>
-              <input class="event__input  event__input--price" id="event-price-${id}" type="text" name="event-price" value=${basePrice}>
-            </div>
+          <div class="event__field-group  event__field-group--price">
+            <label class="event__label" for="event-price-${id}">
+              <span class="visually-hidden">Price</span>
+              &euro;
+            </label>
+            <input class="event__input  event__input--price" id="event-price-${id}" type="text" name="event-price" value=${basePrice}>
+          </div>
 
-            <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-            <button class="event__reset-btn" type="reset">Delete</button>
-            <button class="event__rollup-btn" type="button">
-              <span class="visually-hidden">Open event</span>
-            </button>
-          </header>
-          ${createDetailsTemplate(filteredOfferByType, checkedOffers, filteredDestinationById)}
-        </form>
-      </li>
-    `
+          <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+          <button class="event__reset-btn" type="reset">Delete</button>
+          <button class="event__rollup-btn" type="button">
+            <span class="visually-hidden">Open event</span>
+          </button>
+        </header>
+        ${createDetailsTemplate(filteredOfferByType, checkedOffers, filteredDestinationById)}
+      </form>
+    </li>`
   );
 }
 
@@ -177,9 +175,17 @@ export default class EditPointView extends AbstractStatefulView {
     this._restoreHandlers();
   }
 
+  get template() {
+    return createEditPointTemplate(this._state, this.#offers, this.#destinations);
+  }
+
+  reset(point) {
+    this.updateElement(EditPointView.parsePointToState(point));
+  }
+
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFormSubmit(this._state);
+    this.#handleFormSubmit(EditPointView.parseStateToPoint(this._state));
   };
 
   #RollupButtonClick = (evt) => {
@@ -194,6 +200,7 @@ export default class EditPointView extends AbstractStatefulView {
       type: evt.target.value
     });
   };
+  // TODO метод упдате мы используем только тогда когда чтото перерисовывается в компоненте(добовляется блокб удаляется блок)?
 
   #cityInputHandler = (evt) => {
     this.updateElement({
@@ -202,24 +209,30 @@ export default class EditPointView extends AbstractStatefulView {
   };
 
   #changeOfferCheckedHandler = () => {
-    const checkedOffers = Array.from(this.element.querySelectorAll('.event__offer-checkbox:checked'));
+    this._setState({
+      offers: Array.from(this.element.querySelectorAll('.event__offer-checkbox:checked')).map((item) => item.id),
+    });
+  };
 
-    console.log(checkedOffers);
+  #cangePriceHandler = (evt) => {
+    evt.preventDefault();
+
+    this._setState({
+      basePrice: evt.target.value,
+    });
   };
 
   _restoreHandlers() {
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#RollupButtonClick);
     this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#changeTypeHandler);
+    // TODO не понятно поведение ввода города, в состоянииредактирования сюда можно ввести что угодно, и только при новой задаче он должен быть залочен?
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#cityInputHandler);
     this.element.querySelector('.event__available-offers')?.addEventListener('change',this.#changeOfferCheckedHandler);
+    this.element.querySelector('.event__field-group--price').addEventListener('input', this.#cangePriceHandler);
   }
 
-  static parsePointToState(point) {
-    return {...point};
-  }
-
-  get template() {
-    return createEditPointTemplate(this._state, this.#offers, this.#destinations);
-  }
+  static parsePointToState = (point) => point;
+  // TODO в данной реализации можно обойтись одним статичным методом?
+  static parseStateToPoint = (state) => state;
 }
