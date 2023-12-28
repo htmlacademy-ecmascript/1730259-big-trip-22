@@ -2,6 +2,8 @@ import { DEFAULT_POINT, DateFormat, POINTS_TYPE } from '../const.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { capitalize, getElementById, getElementByType } from '../utils/common.js';
 import { humanizeDate } from '../utils/date.js';
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
 
 function createTypeTemplate(type, checkedType, id) {
   const isChecked = checkedType === type ? 'checked' : false;
@@ -162,6 +164,8 @@ export default class EditPointView extends AbstractStatefulView {
   #destinations = null;
   #handleFormSubmit = null;
   #handleRollupButtonClick = null;
+  #dateFromPicker = null;
+  #dateToPicker = null;
 
   constructor({point = DEFAULT_POINT, offers, destinations, onRollupButtonClick, onFormSubmit}) {
     super();
@@ -230,6 +234,19 @@ export default class EditPointView extends AbstractStatefulView {
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#cityInputHandler);
     this.element.querySelector('.event__available-offers')?.addEventListener('change',this.#changeOfferCheckedHandler);
     this.element.querySelector('.event__field-group--price').addEventListener('input', this.#cangePriceHandler);
+    this.#setDatePicker();
+  }
+
+  #setDatePicker() {
+    const [dateFromElement, dateToElement] = this.element.querySelectorAll('.event__input--time');
+
+    console.log(dateFromElement);
+    console.log(dateToElement);
+
+    const commonConfig = {
+      dateFormat: 'Z',
+    };
+    console.log(commonConfig);
   }
 
   static parsePointToState = (point) => point;
