@@ -1,3 +1,5 @@
+import { DELAY_TIME } from '../const';
+
 function getRandomArrayElement(items) {
   return items[Math.floor(Math.random() * items.length)];
 }
@@ -43,6 +45,28 @@ function updateItem(items, update) {
 
 const sortByPrice = (a, b) => b.basePrice - a.basePrice;
 
+const showAlert = (element, message) => {
+  const alertContainer = document.createElement('div');
+  alertContainer.style.zIndex = '1000';
+  alertContainer.style.position = 'absolute';
+  alertContainer.style.width = '500px';
+  alertContainer.style.right = '50%';
+  alertContainer.style.transform = 'translateX(50%)';
+  alertContainer.style.top = '0';
+  alertContainer.style.padding = '10px 3px';
+  alertContainer.style.fontSize = '18px';
+  alertContainer.style.textAlign = 'center';
+  alertContainer.style.backgroundColor = '#ff0000';
+  alertContainer.style.color = '#000000';
+  alertContainer.textContent = message;
+
+  element.append(alertContainer);
+
+  setTimeout(() => {
+    alertContainer.remove();
+  }, DELAY_TIME);
+};
+
 export {
   getRandomArrayElement,
   getRandomNumber,
@@ -54,4 +78,5 @@ export {
   isEscape,
   updateItem,
   sortByPrice,
+  showAlert,
 };

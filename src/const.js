@@ -2,6 +2,8 @@ import dayjs from 'dayjs';
 
 const POINT_COUNT = 4;
 
+const DELAY_TIME = 5000;
+
 const MILLISECONDS_IN_HOUR = 3600000;
 const MILLISECONDS_IN_DAY = 86400000;
 
@@ -89,4 +91,5 @@ export {
   Mode,
   REG_EXP_SORT,
   COMMON_CONFIG,
+  DELAY_TIME,
 };

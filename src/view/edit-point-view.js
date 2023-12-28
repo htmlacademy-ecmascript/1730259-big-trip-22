@@ -1,6 +1,6 @@
 import { DEFAULT_POINT, DateFormat, POINTS_TYPE, COMMON_CONFIG } from '../const.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
-import { capitalize, getElementById, getElementByType } from '../utils/common.js';
+import { capitalize, getElementById, getElementByType, showAlert } from '../utils/common.js';
 import { humanizeDate } from '../utils/date.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
@@ -237,7 +237,7 @@ export default class EditPointView extends AbstractStatefulView {
     evt.preventDefault();
 
     if (!Number.isInteger(evt.target.value)) {
-      throw new TypeError('Только целое число');
+      showAlert(this.element, 'Только целое число');
     }
 
     this._setState({
