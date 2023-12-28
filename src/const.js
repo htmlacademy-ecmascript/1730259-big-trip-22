@@ -9,6 +9,7 @@ const DateFormat = {
   // DATETIME_ATTRIBUTE: 'YYYY-MM-DDTHH:mm',
   // DAY: 'DD',
   // MONTH: 'MMM',
+  DATE_PICKER: 'd/m/y H:i',
   DAY_MONTH: 'D MMM',
   MONTH_DAY: 'MMM DD',
   HOUR_MINUTES: 'HH:mm',
@@ -16,6 +17,13 @@ const DateFormat = {
   MINUTES_WITH_POSTFIX: 'mm[M]',
   HOUR_MINUTES_WITH_POSTFIX: 'HH[H] mm[M]',
   DAY_HOUR_MINUTES_WITH_POSTFIX: 'DD[D] HH[H] mm[M]'
+};
+
+const COMMON_CONFIG = {
+  dateFormat: DateFormat.DATE_PICKER,
+  enableTime: true,
+  'time_24hr': true,
+  locale: {firstDayOfWeek: 1},
 };
 
 const FilterType = {
@@ -80,4 +88,5 @@ export {
   SystemMessageLoad,
   Mode,
   REG_EXP_SORT,
+  COMMON_CONFIG,
 };

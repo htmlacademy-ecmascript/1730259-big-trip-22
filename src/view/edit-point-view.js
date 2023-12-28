@@ -1,9 +1,10 @@
-import { DEFAULT_POINT, DateFormat, POINTS_TYPE } from '../const.js';
+import { DEFAULT_POINT, DateFormat, POINTS_TYPE, COMMON_CONFIG } from '../const.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { capitalize, getElementById, getElementByType } from '../utils/common.js';
 import { humanizeDate } from '../utils/date.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import 'flatpickr/dist/themes/material_blue.css';
 
 function createTypeTemplate(type, checkedType, id) {
   const isChecked = checkedType === type ? 'checked' : false;
@@ -187,6 +188,20 @@ export default class EditPointView extends AbstractStatefulView {
     this.updateElement(EditPointView.parsePointToState(point));
   }
 
+  removeElement() {
+    super.removeElement();
+
+    if (this.#dateFromPicker) {
+      this.#dateFromPicker.destroy();
+      this.#dateFromPicker = null;
+    }
+
+    if (this.#dateToPicker) {
+      this.#dateToPicker.destroy();
+      this.#dateToPicker = null;
+    }
+  }
+
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
     this.#handleFormSubmit(EditPointView.parseStateToPoint(this._state));
@@ -234,19 +249,38 @@ export default class EditPointView extends AbstractStatefulView {
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#cityInputHandler);
     this.element.querySelector('.event__available-offers')?.addEventListener('change',this.#changeOfferCheckedHandler);
     this.element.querySelector('.event__field-group--price').addEventListener('input', this.#cangePriceHandler);
+
     this.#setDatePicker();
   }
+
+  #dateFromChanheHandler = ([userDate]) => {
+    this.updateElement({
+      dateFrom: userDate,
+    });
+  };
+
+  #dateToChanheHandler = ([userDate]) => {
+    this.updateElement({
+      dateTo: userDate,
+    });
+  };
 
   #setDatePicker() {
     const [dateFromElement, dateToElement] = this.element.querySelectorAll('.event__input--time');
 
-    console.log(dateFromElement);
-    console.log(dateToElement);
+    this.#dateFromPicker = flatpickr(dateFromElement, {
+      ...COMMON_CONFIG,
+      defaultDate: this._state.dateFrom,
+      maxDate: this._state.dateTo,
+      onChange: this.#dateFromChanheHandler,
+    });
 
-    const commonConfig = {
-      dateFormat: 'Z',
-    };
-    console.log(commonConfig);
+    this.#dateToPicker = flatpickr(dateToElement, {
+      ...COMMON_CONFIG,
+      defaultDate: this._state.dateTo,
+      minDate: this._state.dateFrom,
+      onChange: this.#dateToChanheHandler,
+    });
   }
 
   static parsePointToState = (point) => point;
