@@ -236,6 +236,10 @@ export default class EditPointView extends AbstractStatefulView {
   #cangePriceHandler = (evt) => {
     evt.preventDefault();
 
+    if (!Number.isInteger(evt.target.value)) {
+      throw new TypeError('Только целое число');
+    }
+
     this._setState({
       basePrice: evt.target.value,
     });
