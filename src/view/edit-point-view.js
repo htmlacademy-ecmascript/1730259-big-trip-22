@@ -1,6 +1,6 @@
 import { DEFAULT_POINT, DateFormat, POINTS_TYPE, COMMON_CONFIG } from '../const.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
-import { capitalize, getElementById, getElementByType, showAlert } from '../utils/common.js';
+import { capitalize, getElementById, getElementByType } from '../utils/common.js';
 import { humanizeDate } from '../utils/date.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
@@ -145,7 +145,7 @@ function createEditPointTemplate(point, offers, destinations) {
               <span class="visually-hidden">Price</span>
               &euro;
             </label>
-            <input class="event__input  event__input--price" id="event-price-${id}" type="text" name="event-price" value=${basePrice}>
+            <input class="event__input  event__input--price" id="event-price-${id}" type="number" min="0" name="event-price" value=${basePrice}>
           </div>
 
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -171,7 +171,7 @@ export default class EditPointView extends AbstractStatefulView {
   constructor({point = DEFAULT_POINT, offers, destinations, onRollupButtonClick, onFormSubmit}) {
     super();
 
-    this._setState(EditPointView.parsePointToState(point));
+    this._setState(point);
     this.#offers = offers;
     this.#destinations = destinations;
     this.#handleFormSubmit = onFormSubmit;
@@ -185,7 +185,7 @@ export default class EditPointView extends AbstractStatefulView {
   }
 
   reset(point) {
-    this.updateElement(EditPointView.parsePointToState(point));
+    this.updateElement(point);
   }
 
   removeElement() {
@@ -204,7 +204,7 @@ export default class EditPointView extends AbstractStatefulView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFormSubmit(EditPointView.parseStateToPoint(this._state));
+    this.#handleFormSubmit(this._state);
   };
 
   #RollupButtonClick = (evt) => {
@@ -219,12 +219,22 @@ export default class EditPointView extends AbstractStatefulView {
       type: evt.target.value
     });
   };
-  // TODO метод упдате мы используем только тогда когда чтото перерисовывается в компоненте(добовляется блокб удаляется блок)?
 
   #cityInputHandler = (evt) => {
-    this.updateElement({
-      destination: this.#destinations.find((destination) => destination.name === evt.target.value).id,
-    });
+    const validateInput = this.#destinations.map((destination) => destination.name.toLowerCase())
+      .filter((name) => name.includes(evt.target.value.toLowerCase()));
+
+    const nextDestination = this.#destinations.find((destination) => destination.name === evt.target.value);
+
+    if (validateInput.length === 0) {
+      evt.target.style.outlineColor = 'red';
+    }
+
+    if (nextDestination) {
+      this.updateElement({
+        destination: nextDestination.id,
+      });
+    }
   };
 
   #changeOfferCheckedHandler = () => {
@@ -236,10 +246,6 @@ export default class EditPointView extends AbstractStatefulView {
   #cangePriceHandler = (evt) => {
     evt.preventDefault();
 
-    if (!Number.isInteger(evt.target.value)) {
-      showAlert(this.element, 'Только целое число');
-    }
-
     this._setState({
       basePrice: evt.target.value,
     });
@@ -249,8 +255,7 @@ export default class EditPointView extends AbstractStatefulView {
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#RollupButtonClick);
     this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#changeTypeHandler);
-    // TODO не понятно поведение ввода города, в состоянииредактирования сюда можно ввести что угодно, и только при новой задаче он должен быть залочен?
-    this.element.querySelector('.event__input--destination').addEventListener('change', this.#cityInputHandler);
+    this.element.querySelector('.event__input--destination').addEventListener('input', this.#cityInputHandler);
     this.element.querySelector('.event__available-offers')?.addEventListener('change',this.#changeOfferCheckedHandler);
     this.element.querySelector('.event__field-group--price').addEventListener('input', this.#cangePriceHandler);
 
@@ -286,8 +291,4 @@ export default class EditPointView extends AbstractStatefulView {
       onChange: this.#dateToChanheHandler,
     });
   }
-
-  static parsePointToState = (point) => point;
-  // TODO в данной реализации можно обойтись одним статичным методом?
-  static parseStateToPoint = (state) => state;
 }
