@@ -1,7 +1,10 @@
-import { DEFAULT_POINT, DateFormat, POINTS_TYPE } from '../const.js';
+import { DEFAULT_POINT, DateFormat, POINTS_TYPE, COMMON_CONFIG } from '../const.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { capitalize, getElementById, getElementByType } from '../utils/common.js';
 import { humanizeDate } from '../utils/date.js';
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
+import 'flatpickr/dist/themes/material_blue.css';
 
 function createTypeTemplate(type, checkedType, id) {
   const isChecked = checkedType === type ? 'checked' : false;
@@ -142,7 +145,7 @@ function createEditPointTemplate(point, offers, destinations) {
               <span class="visually-hidden">Price</span>
               &euro;
             </label>
-            <input class="event__input  event__input--price" id="event-price-${id}" type="text" name="event-price" value=${basePrice}>
+            <input class="event__input  event__input--price" id="event-price-${id}" type="number" min="0" name="event-price" value=${basePrice}>
           </div>
 
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -162,11 +165,13 @@ export default class EditPointView extends AbstractStatefulView {
   #destinations = null;
   #handleFormSubmit = null;
   #handleRollupButtonClick = null;
+  #dateFromPicker = null;
+  #dateToPicker = null;
 
   constructor({point = DEFAULT_POINT, offers, destinations, onRollupButtonClick, onFormSubmit}) {
     super();
 
-    this._setState(EditPointView.parsePointToState(point));
+    this._setState(point);
     this.#offers = offers;
     this.#destinations = destinations;
     this.#handleFormSubmit = onFormSubmit;
@@ -180,12 +185,26 @@ export default class EditPointView extends AbstractStatefulView {
   }
 
   reset(point) {
-    this.updateElement(EditPointView.parsePointToState(point));
+    this.updateElement(point);
+  }
+
+  removeElement() {
+    super.removeElement();
+
+    if (this.#dateFromPicker) {
+      this.#dateFromPicker.destroy();
+      this.#dateFromPicker = null;
+    }
+
+    if (this.#dateToPicker) {
+      this.#dateToPicker.destroy();
+      this.#dateToPicker = null;
+    }
   }
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFormSubmit(EditPointView.parseStateToPoint(this._state));
+    this.#handleFormSubmit(this._state);
   };
 
   #RollupButtonClick = (evt) => {
@@ -200,12 +219,22 @@ export default class EditPointView extends AbstractStatefulView {
       type: evt.target.value
     });
   };
-  // TODO метод упдате мы используем только тогда когда чтото перерисовывается в компоненте(добовляется блокб удаляется блок)?
 
   #cityInputHandler = (evt) => {
-    this.updateElement({
-      destination: this.#destinations.find((destination) => destination.name === evt.target.value).id,
-    });
+    const validateInput = this.#destinations.map((destination) => destination.name.toLowerCase())
+      .filter((name) => name.includes(evt.target.value.toLowerCase()));
+
+    const nextDestination = this.#destinations.find((destination) => destination.name === evt.target.value);
+
+    if (validateInput.length === 0) {
+      evt.target.style.outlineColor = 'red';
+    }
+
+    if (nextDestination) {
+      this.updateElement({
+        destination: nextDestination.id,
+      });
+    }
   };
 
   #changeOfferCheckedHandler = () => {
@@ -226,13 +255,40 @@ export default class EditPointView extends AbstractStatefulView {
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#RollupButtonClick);
     this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#changeTypeHandler);
-    // TODO не понятно поведение ввода города, в состоянииредактирования сюда можно ввести что угодно, и только при новой задаче он должен быть залочен?
-    this.element.querySelector('.event__input--destination').addEventListener('change', this.#cityInputHandler);
+    this.element.querySelector('.event__input--destination').addEventListener('input', this.#cityInputHandler);
     this.element.querySelector('.event__available-offers')?.addEventListener('change',this.#changeOfferCheckedHandler);
     this.element.querySelector('.event__field-group--price').addEventListener('input', this.#cangePriceHandler);
+
+    this.#setDatePicker();
   }
 
-  static parsePointToState = (point) => point;
-  // TODO в данной реализации можно обойтись одним статичным методом?
-  static parseStateToPoint = (state) => state;
+  #dateFromChanheHandler = ([userDate]) => {
+    this.updateElement({
+      dateFrom: userDate,
+    });
+  };
+
+  #dateToChanheHandler = ([userDate]) => {
+    this.updateElement({
+      dateTo: userDate,
+    });
+  };
+
+  #setDatePicker() {
+    const [dateFromElement, dateToElement] = this.element.querySelectorAll('.event__input--time');
+
+    this.#dateFromPicker = flatpickr(dateFromElement, {
+      ...COMMON_CONFIG,
+      defaultDate: this._state.dateFrom,
+      maxDate: this._state.dateTo,
+      onChange: this.#dateFromChanheHandler,
+    });
+
+    this.#dateToPicker = flatpickr(dateToElement, {
+      ...COMMON_CONFIG,
+      defaultDate: this._state.dateTo,
+      minDate: this._state.dateFrom,
+      onChange: this.#dateToChanheHandler,
+    });
+  }
 }
