@@ -260,6 +260,8 @@ export default class EditPointView extends AbstractStatefulView {
     this.element.querySelector('.event__field-group--price').addEventListener('input', this.#cangePriceHandler);
 
     this.#setDatePicker();
+
+    console.log(this.element);
   }
 
   #dateFromChanheHandler = ([userDate]) => {
