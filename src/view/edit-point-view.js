@@ -95,6 +95,18 @@ function createDetailsTemplate({offers}, checkedOffers, { description, pictures 
   return '';
 }
 
+function createRollupBtn(id) {
+  if (id === 0) {
+    return '';
+  }
+
+  return (
+    `<button class="event__rollup-btn" type="button">
+      <span class="visually-hidden">Open event</span>
+    </button>`
+  );
+}
+
 function createEditPointTemplate(point, offers, destinations) {
   const { id, type, dateFrom, dateTo, basePrice, offers: checkedOffers, destination: pointDestination } = point;
   const filteredOfferByType = getElementByType(offers, type);
@@ -149,10 +161,8 @@ function createEditPointTemplate(point, offers, destinations) {
           </div>
 
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-          <button class="event__reset-btn" type="reset">Delete</button>
-          <button class="event__rollup-btn" type="button">
-            <span class="visually-hidden">Open event</span>
-          </button>
+          <button class="event__reset-btn" type="reset">${id === 0 ? 'Cancel' : 'Delete'}</button>
+          ${createRollupBtn(id)}
         </header>
         ${createDetailsTemplate(filteredOfferByType, checkedOffers, filteredDestinationById)}
       </form>
@@ -260,8 +270,6 @@ export default class EditPointView extends AbstractStatefulView {
     this.element.querySelector('.event__field-group--price').addEventListener('input', this.#cangePriceHandler);
 
     this.#setDatePicker();
-
-    console.log(this.element);
   }
 
   #dateFromChanheHandler = ([userDate]) => {

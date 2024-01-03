@@ -1,10 +1,10 @@
-import { render } from '../framework/render';
+import { render, remove } from '../framework/render';
 import SystemMessageView from '../view/system-message-viev';
 import WeapointListView from '../view/waypoint-list-view';
 import SortListView from '../view/sort-list-view';
-import { FilterType, SortType } from '../const';
+import { FilterType, SortType, UpdateType, UserAction } from '../const';
 import PointPresenter from './point-presenter';
-import { sortByPrice, updateItem } from '../utils/common';
+import { sortByPrice } from '../utils/common';
 import { sortByTime } from '../utils/date';
 
 
@@ -16,21 +16,31 @@ export default class BoardPresenter {
 
   #weapointListView = new WeapointListView();
 
-  #boardPoints = [];
-  #originalPoints = [];
   #boardOffers = [];
   #boardDestinations = [];
 
   #pointPresenters = new Map();
+  #currentSortType = SortType.DAY;
 
   constructor({boardContainer, pointModel}) {
     this.#boardContainer = boardContainer;
     this.#pointModel = pointModel;
+
+    this.#pointModel.addObserver(this.#handleModelEvent);
+  }
+
+  get points() {
+    switch (this.#currentSortType) {
+      case SortType.TIME:
+        return [...this.#pointModel.points].sort(sortByTime);
+      case SortType.PRICE:
+        return [...this.#pointModel.points].sort(sortByPrice);
+    }
+
+    return this.#pointModel.points;
   }
 
   init() {
-    this.#boardPoints = [...this.#pointModel.points];
-    this.#originalPoints = [...this.#pointModel.points];
     this.#boardOffers = [...this.#pointModel.offers];
     this.#boardDestinations = [...this.#pointModel.destinations];
 
@@ -40,7 +50,7 @@ export default class BoardPresenter {
   #renderPoint({point, offers, destinations}) {
     const pointPresenter = new PointPresenter({
       pointListContainer: this.#weapointListView.element,
-      onDataChange: this.#handlePointChange,
+      onDataChange: this.#handleViewAction,
       onModeChange: this.#handleModeChange
     });
 
@@ -49,36 +59,63 @@ export default class BoardPresenter {
     this.#pointPresenters.set(point.id, pointPresenter);
   }
 
-  #handlePointChange = (updatedPoint) => {
-    this.#boardPoints = updateItem(this.#boardPoints, updatedPoint);
-    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint, this.#boardOffers, this.#boardDestinations);
+  #handleViewAction = (actionType, updateType, update) => {
+    switch (actionType) {
+      case UserAction.UPDATE_POINT:
+        this.#pointModel.updatePoint(updateType, update);
+        break;
+      case UserAction.ADD_POINT:
+        this.#pointModel.addPoint(updateType, update);
+        break;
+      case UserAction.DELETE_POINT:
+        this.#pointModel.deletePoint(updateType, update);
+        break;
+    }
+  };
+
+  #handleModelEvent = (updateType, data) => {
+    switch (updateType) {
+      case UpdateType.PATCH:
+        this.#pointPresenters.get(data.id).init(data, this.#boardOffers, this.#boardDestinations);
+        break;
+      case UpdateType.MINOR:
+        this.#clearBoard();
+        this.#renderBoard();
+        break;
+      case UpdateType.MAJOR:
+        this.#clearBoard({resetSortType: true});
+        this.#renderBoard();
+        break;
+    }
   };
 
   #handleModeChange = () => {
     this.#pointPresenters.forEach((pointPresenter) => pointPresenter.resetView());
   };
 
-  #sortPoints(sortType) {
-    switch (sortType) {
-      case SortType.TIME:
-        this.#boardPoints.sort(sortByTime);
-        break;
-      case SortType.PRICE:
-        this.#boardPoints.sort(sortByPrice);
-        break;
-      default:
-        this.#boardPoints = [...this.#originalPoints];
+  #handleSortTypeChange = (sortType) => {
+    this.#currentSortType = sortType;
+    this.#clearBoard();
+    this.#renderBoard();
+  };
+
+  #clearBoard({resetSortType = false} = {}) {
+    this.#pointPresenters.forEach((presenter) => presenter.destroy());
+    this.#pointPresenters.clear();
+
+    remove(this.#sortListView);
+    remove(this.#systemMessageComponent);
+
+    if(resetSortType) {
+      this.#currentSortType = SortType.DAY;
     }
   }
 
-  #handleSortTypeChange = (sortType) => {
-    this.#sortPoints(sortType);
-    this.#clearPointList();
-    this. #renderPointsList();
-  };
-
   #renderSort() {
-    this.#sortListView = new SortListView({ onSortTypeChange: this.#handleSortTypeChange});
+    this.#sortListView = new SortListView({
+      currentSortType: this.#currentSortType,
+      onSortTypeChange: this.#handleSortTypeChange,
+    });
 
     render(this.#sortListView, this.#boardContainer);
   }
@@ -89,17 +126,12 @@ export default class BoardPresenter {
     render(this.#systemMessageComponent, this.#boardContainer);
   }
 
-  #clearPointList() {
-    this.#pointPresenters.forEach((presenter) => presenter.destroy());
-    this.#pointPresenters.clear();
-  }
-
   #renderPointsList() {
     render(this.#weapointListView, this.#boardContainer);
 
-    for (let i = 0; i < this.#boardPoints.length; i++) {
+    for (let i = 0; i < this.points.length; i++) {
       this.#renderPoint({
-        point: this.#boardPoints[i],
+        point: this.points[i],
         offers: this.#boardOffers,
         destinations: this.#boardDestinations
       });
@@ -107,7 +139,7 @@ export default class BoardPresenter {
   }
 
   #renderBoard() {
-    if (this.#boardPoints.length === 0) {
+    if (this.points.length === 0) {
       this.#renderSystemMessage({message: FilterType.EVERYTHING});
       return;
     }

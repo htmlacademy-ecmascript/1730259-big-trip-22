@@ -1,4 +1,4 @@
-import { Mode } from '../const';
+import { Mode, UserAction, UpdateType, } from '../const';
 import { remove, render, replace } from '../framework/render';
 import { isEscape } from '../utils/common';
 import EditPointView from '../view/edit-point-view';
@@ -98,7 +98,12 @@ export default class PointPresenter {
   };
 
   #handleFormSubmit = (point) => {
-    this.#handleDataChange(point);
+    this.#handleDataChange(
+      UserAction.UPDATE_POINT,
+      UpdateType.MINOR,
+      point
+    );
+
     this.#replaceFormToCard();
   };
 
@@ -112,6 +117,10 @@ export default class PointPresenter {
   };
 
   #handleFavoriteClick = () => {
-    this.#handleDataChange({...this.#point, isFavorite: !this.#point.isFavorite});
+    this.#handleDataChange(
+      UserAction.UPDATE_POINT,
+      UpdateType.PATCH,
+      {...this.#point, isFavorite: !this.#point.isFavorite},
+    );
   };
 }

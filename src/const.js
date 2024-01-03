@@ -58,7 +58,7 @@ const SortType = {
 const POINTS_TYPE = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 
 const DEFAULT_POINT = {
-  id: '',
+  id: 0,
   basePrice: 0,
   dateFrom: dayjs(),
   dateTo: dayjs(),
@@ -75,6 +75,18 @@ const Mode = {
 
 const REG_EXP_SORT = /-(\w+)/;
 
+const UserAction = {
+  UPDATE_POINT: 'UPDATE_TASK',
+  ADD_POINT: 'ADD_TASK',
+  DELETE_POINT: 'DELETE_TASK',
+};
+
+const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};
+
 export {
   POINT_COUNT,
   MILLISECONDS_IN_HOUR,
@@ -89,4 +101,6 @@ export {
   Mode,
   REG_EXP_SORT,
   COMMON_CONFIG,
+  UserAction,
+  UpdateType,
 };
