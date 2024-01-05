@@ -126,18 +126,6 @@ export default class BoardPresenter {
     render(this.#systemMessageComponent, this.#boardContainer);
   }
 
-  #renderPointsList() {
-    render(this.#weapointListView, this.#boardContainer);
-
-    for (let i = 0; i < this.points.length; i++) {
-      this.#renderPoint({
-        point: this.points[i],
-        offers: this.#boardOffers,
-        destinations: this.#boardDestinations
-      });
-    }
-  }
-
   #renderBoard() {
     if (this.points.length === 0) {
       this.#renderSystemMessage({message: FilterType.EVERYTHING});
@@ -145,6 +133,13 @@ export default class BoardPresenter {
     }
 
     this.#renderSort();
-    this.#renderPointsList();
+
+    render(this.#weapointListView, this.#boardContainer);
+
+    this.points.map((point) => this.#renderPoint({
+      point: point,
+      offers: this.#boardOffers,
+      destinations: this.#boardDestinations
+    }));
   }
 }

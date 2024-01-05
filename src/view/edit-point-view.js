@@ -1,4 +1,4 @@
-import { DEFAULT_POINT, DateFormat, POINTS_TYPE, COMMON_CONFIG } from '../const.js';
+import { DEFAULT_POINT, DateFormat, POINTS_TYPE, COMMON_CONFIG, TypeButtonReset } from '../const.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { capitalize, getElementById, getElementByType } from '../utils/common.js';
 import { humanizeDate } from '../utils/date.js';
@@ -175,16 +175,18 @@ export default class EditPointView extends AbstractStatefulView {
   #destinations = null;
   #handleFormSubmit = null;
   #handleRollupButtonClick = null;
+  #handleDeleteClick = null;
   #dateFromPicker = null;
   #dateToPicker = null;
 
-  constructor({point = DEFAULT_POINT, offers, destinations, onRollupButtonClick, onFormSubmit}) {
+  constructor({point = DEFAULT_POINT, offers, destinations, onRollupButtonClick, onFormSubmit, onDeleteClick}) {
     super();
 
     this._setState(point);
     this.#offers = offers;
     this.#destinations = destinations;
     this.#handleFormSubmit = onFormSubmit;
+    this.#handleDeleteClick = onDeleteClick;
     this.#handleRollupButtonClick = onRollupButtonClick;
 
     this._restoreHandlers();
@@ -215,6 +217,11 @@ export default class EditPointView extends AbstractStatefulView {
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
     this.#handleFormSubmit(this._state);
+  };
+
+  #formDeleteClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleDeleteClick(this._state);
   };
 
   #RollupButtonClick = (evt) => {
@@ -261,6 +268,8 @@ export default class EditPointView extends AbstractStatefulView {
     });
   };
 
+  // TODO почему в этом блоке выпадает ошибка когда он не отрисован? this.element.querySelector('.event__available-offers')?.addEventListener('change',this.#changeOfferCheckedHandler);
+
   _restoreHandlers() {
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#RollupButtonClick);
     this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
@@ -268,6 +277,14 @@ export default class EditPointView extends AbstractStatefulView {
     this.element.querySelector('.event__input--destination').addEventListener('input', this.#cityInputHandler);
     this.element.querySelector('.event__available-offers')?.addEventListener('change',this.#changeOfferCheckedHandler);
     this.element.querySelector('.event__field-group--price').addEventListener('input', this.#cangePriceHandler);
+
+    const resetBtn = this.element.querySelector('.event__reset-btn');
+
+    if (resetBtn.textContent.toLowerCase() === TypeButtonReset.DELETE) {
+      resetBtn.addEventListener('click', this.#formDeleteClickHandler);
+    } else {
+      resetBtn.addEventListener('click', this.#RollupButtonClick);
+    }
 
     this.#setDatePicker();
   }

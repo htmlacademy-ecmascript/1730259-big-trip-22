@@ -87,6 +87,11 @@ const UpdateType = {
   MAJOR: 'MAJOR',
 };
 
+const TypeButtonReset = {
+  DELETE: 'delete',
+  CANCEL: 'cancel',
+};
+
 export {
   POINT_COUNT,
   MILLISECONDS_IN_HOUR,
@@ -103,4 +108,5 @@ export {
   COMMON_CONFIG,
   UserAction,
   UpdateType,
+  TypeButtonReset,
 };
