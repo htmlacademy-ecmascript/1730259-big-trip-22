@@ -8,13 +8,4 @@ const filter = {
   [FilterType.PAST]: (points) => points.filter((point) => isPointPast(point.dateTo)),
 };
 
-function generateFilter(points) {
-  return Object.entries(filter).map(
-    ([filterType, filterPoints]) => ({
-      type: filterType,
-      count: filterPoints(points).length,
-    }),
-  );
-}
-
-export { filter, generateFilter };
+export { filter };

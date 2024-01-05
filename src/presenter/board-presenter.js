@@ -6,6 +6,7 @@ import { FilterType, SortType, UpdateType, UserAction } from '../const';
 import PointPresenter from './point-presenter';
 import { sortByPrice } from '../utils/common';
 import { sortByTime } from '../utils/date';
+import { filter } from '../utils/filter';
 
 
 export default class BoardPresenter {
@@ -13,6 +14,7 @@ export default class BoardPresenter {
   #pointModel = null;
   #systemMessageComponent = null;
   #sortListView = null;
+  #filterModel = null;
 
   #weapointListView = new WeapointListView();
 
@@ -22,22 +24,28 @@ export default class BoardPresenter {
   #pointPresenters = new Map();
   #currentSortType = SortType.DAY;
 
-  constructor({boardContainer, pointModel}) {
+  constructor({boardContainer, pointModel, filterModel}) {
     this.#boardContainer = boardContainer;
     this.#pointModel = pointModel;
+    this.#filterModel = filterModel;
 
     this.#pointModel.addObserver(this.#handleModelEvent);
+    this.#filterModel.addObserver(this.#handleModelEvent);
   }
 
   get points() {
+    const filterType = this.#filterModel.filter;
+    const points = this.#pointModel.points;
+    const filteredPoint = filter[filterType](points);
+
     switch (this.#currentSortType) {
       case SortType.TIME:
-        return [...this.#pointModel.points].sort(sortByTime);
+        return filteredPoint.sort(sortByTime);
       case SortType.PRICE:
-        return [...this.#pointModel.points].sort(sortByPrice);
+        return filteredPoint.sort(sortByPrice);
     }
 
-    return this.#pointModel.points;
+    return filteredPoint;
   }
 
   init() {
