@@ -23,6 +23,7 @@ export default class BoardPresenter {
 
   #pointPresenters = new Map();
   #currentSortType = SortType.DAY;
+  #filterType = FilterType.EVERYTHING;
 
   constructor({boardContainer, pointModel, filterModel}) {
     this.#boardContainer = boardContainer;
@@ -34,9 +35,9 @@ export default class BoardPresenter {
   }
 
   get points() {
-    const filterType = this.#filterModel.filter;
+    this.#filterType = this.#filterModel.filter;
     const points = this.#pointModel.points;
-    const filteredPoint = filter[filterType](points);
+    const filteredPoint = filter[this.#filterType](points);
 
     switch (this.#currentSortType) {
       case SortType.TIME:
@@ -112,7 +113,10 @@ export default class BoardPresenter {
     this.#pointPresenters.clear();
 
     remove(this.#sortListView);
-    remove(this.#systemMessageComponent);
+
+    if (this.#systemMessageComponent) {
+      remove(this.#systemMessageComponent);
+    }
 
     if(resetSortType) {
       this.#currentSortType = SortType.DAY;
@@ -128,15 +132,15 @@ export default class BoardPresenter {
     render(this.#sortListView, this.#boardContainer);
   }
 
-  #renderSystemMessage({message}) {
-    this.#systemMessageComponent = new SystemMessageView({messageType: message});
+  #renderSystemMessage() {
+    this.#systemMessageComponent = new SystemMessageView({messageType: this.#filterType});
 
     render(this.#systemMessageComponent, this.#boardContainer);
   }
 
   #renderBoard() {
     if (this.points.length === 0) {
-      this.#renderSystemMessage({message: FilterType.EVERYTHING});
+      this.#renderSystemMessage();
       return;
     }
 
