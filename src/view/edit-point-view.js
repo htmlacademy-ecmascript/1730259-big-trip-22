@@ -83,7 +83,7 @@ function createDestinationTemplate(description, pictures) {
 }
 
 function createDetailsTemplate({offers}, checkedOffers, filteredDestinationById) {
-  const {description, pictures} = filteredDestinationById || false;
+  const { description, pictures } = filteredDestinationById || {description: '', pictures: []};
 
   if (offers.length > 0 || description.length > 0 || pictures.length > 0) {
     return (
