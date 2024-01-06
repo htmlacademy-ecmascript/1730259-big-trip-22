@@ -1,5 +1,3 @@
-import dayjs from 'dayjs';
-
 const POINT_COUNT = 4;
 
 const MILLISECONDS_IN_HOUR = 3600000;
@@ -60,11 +58,11 @@ const POINTS_TYPE = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-i
 const DEFAULT_POINT = {
   id: 0,
   basePrice: 0,
-  dateFrom: dayjs(),
-  dateTo: dayjs(),
+  dateFrom: null,
+  dateTo: null,
   destination: '',
   isFavorite: false,
-  offers: '',
+  offers: [],
   type: 'flight',
 };
 
@@ -87,11 +85,6 @@ const UpdateType = {
   MAJOR: 'MAJOR',
 };
 
-const TypeButtonReset = {
-  DELETE: 'delete',
-  CANCEL: 'cancel',
-};
-
 export {
   POINT_COUNT,
   MILLISECONDS_IN_HOUR,
@@ -108,5 +101,4 @@ export {
   COMMON_CONFIG,
   UserAction,
   UpdateType,
-  TypeButtonReset,
 };

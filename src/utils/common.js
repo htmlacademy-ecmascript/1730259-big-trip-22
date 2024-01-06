@@ -35,7 +35,7 @@ function getElementById(elements, itemsId) {
   return elements.find((element) => element.id === itemsId);
 }
 
-const isEscape = (evt) => evt.key === 'Escape';
+const isEscape = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 
 const sortByPrice = (a, b) => b.basePrice - a.basePrice;
 

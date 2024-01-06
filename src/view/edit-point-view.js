@@ -1,4 +1,4 @@
-import { DEFAULT_POINT, DateFormat, POINTS_TYPE, COMMON_CONFIG, TypeButtonReset } from '../const.js';
+import { DEFAULT_POINT, DateFormat, POINTS_TYPE, COMMON_CONFIG } from '../const.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { capitalize, getElementById, getElementByType } from '../utils/common.js';
 import { humanizeDate } from '../utils/date.js';
@@ -82,7 +82,9 @@ function createDestinationTemplate(description, pictures) {
   return '';
 }
 
-function createDetailsTemplate({offers}, checkedOffers, { description, pictures }) {
+function createDetailsTemplate({offers}, checkedOffers, filteredDestinationById) {
+  const {description, pictures} = filteredDestinationById || false;
+
   if (offers.length > 0 || description.length > 0 || pictures.length > 0) {
     return (
       `<section class="event__details">
@@ -271,20 +273,13 @@ export default class EditPointView extends AbstractStatefulView {
   // TODO почему в этом блоке выпадает ошибка когда он не отрисован? this.element.querySelector('.event__available-offers')?.addEventListener('change',this.#changeOfferCheckedHandler);
 
   _restoreHandlers() {
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#RollupButtonClick);
+    this.element.querySelector('.event__rollup-btn')?.addEventListener('click', this.#RollupButtonClick);
     this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#changeTypeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('input', this.#cityInputHandler);
     this.element.querySelector('.event__available-offers')?.addEventListener('change',this.#changeOfferCheckedHandler);
     this.element.querySelector('.event__field-group--price').addEventListener('input', this.#cangePriceHandler);
-
-    const resetBtn = this.element.querySelector('.event__reset-btn');
-
-    if (resetBtn.textContent.toLowerCase() === TypeButtonReset.DELETE) {
-      resetBtn.addEventListener('click', this.#formDeleteClickHandler);
-    } else {
-      resetBtn.addEventListener('click', this.#RollupButtonClick);
-    }
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteClickHandler);
 
     this.#setDatePicker();
   }
