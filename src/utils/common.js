@@ -35,11 +35,7 @@ function getElementById(elements, itemsId) {
   return elements.find((element) => element.id === itemsId);
 }
 
-const isEscape = (evt) => evt.key === 'Escape';
-
-function updateItem(items, update) {
-  return items.map((item) => item.id === update.id ? update : item);
-}
+const isEscape = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 
 const sortByPrice = (a, b) => b.basePrice - a.basePrice;
 
@@ -52,6 +48,5 @@ export {
   getElementById,
   getDestinationNames,
   isEscape,
-  updateItem,
   sortByPrice,
 };

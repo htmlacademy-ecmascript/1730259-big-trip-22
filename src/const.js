@@ -1,5 +1,3 @@
-import dayjs from 'dayjs';
-
 const POINT_COUNT = 4;
 
 const MILLISECONDS_IN_HOUR = 3600000;
@@ -58,13 +56,13 @@ const SortType = {
 const POINTS_TYPE = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 
 const DEFAULT_POINT = {
-  id: '',
+  id: 0,
   basePrice: 0,
-  dateFrom: dayjs(),
-  dateTo: dayjs(),
+  dateFrom: null,
+  dateTo: null,
   destination: '',
   isFavorite: false,
-  offers: '',
+  offers: [],
   type: 'flight',
 };
 
@@ -74,6 +72,18 @@ const Mode = {
 };
 
 const REG_EXP_SORT = /-(\w+)/;
+
+const UserAction = {
+  UPDATE_POINT: 'UPDATE_TASK',
+  ADD_POINT: 'ADD_TASK',
+  DELETE_POINT: 'DELETE_TASK',
+};
+
+const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};
 
 export {
   POINT_COUNT,
@@ -89,4 +99,6 @@ export {
   Mode,
   REG_EXP_SORT,
   COMMON_CONFIG,
+  UserAction,
+  UpdateType,
 };

@@ -1,8 +1,8 @@
 import { REG_EXP_SORT, SortType } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
-function createSortItemTemplate(type) {
-  const isChecked = SortType.DAY === type ? 'checked' : '';
+function createSortItemTemplate(type, currentSortType) {
+  const isChecked = currentSortType === type ? 'checked' : '';
   const isDisabled = type === SortType.EVENT || type === SortType.OFFERS ? 'disabled' : '';
 
   return (
@@ -13,27 +13,29 @@ function createSortItemTemplate(type) {
   );
 }
 
-function createSortListTemplate() {
+function createSortListTemplate(currentSortType) {
   return (
     `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
-      ${Object.values(SortType).map((item) => createSortItemTemplate(item)).join('')}
+      ${Object.values(SortType).map((item) => createSortItemTemplate(item, currentSortType)).join('')}
     </form>`
   );
 }
 
 export default class SortListView extends AbstractView {
+  #currentSortType = null;
   #handleSortTypeChange = null;
 
-  constructor({onSortTypeChange}) {
+  constructor({ currentSortType, onSortTypeChange}) {
     super();
 
+    this.#currentSortType = currentSortType;
     this.#handleSortTypeChange = onSortTypeChange;
 
     this.element.addEventListener('change', this.#sortTypeChangeHandler);
   }
 
   get template() {
-    return createSortListTemplate();
+    return createSortListTemplate(this.#currentSortType);
   }
 
   #sortTypeChangeHandler = (evt) => {
