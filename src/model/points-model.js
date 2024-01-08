@@ -102,7 +102,7 @@ export default class PointModel extends Observable {
     return this.#destinations;
   }
 
-  #adaptToClient(point, isAddPoint) {
+  #adaptToClient(point) {
     const adaptedPoint = {
       ...point,
       basePrice: point['base_price'],
@@ -111,9 +111,6 @@ export default class PointModel extends Observable {
       isFavorite: point['is_favorite'],
     };
 
-    if (isAddPoint) {
-      delete adaptedPoint['id'];
-    }
     delete adaptedPoint['base_price'];
     delete adaptedPoint['date_from'];
     delete adaptedPoint['date_to'];

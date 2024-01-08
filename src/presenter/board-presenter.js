@@ -20,9 +20,6 @@ export default class BoardPresenter {
 
   #weapointListView = new WeapointListView();
 
-  // #boardOffers = [];
-  // #boardDestinations = [];
-
   #pointPresenters = new Map();
   #filterType = FilterType.EVERYTHING;
   #currentSortType = SortType.DAY;
@@ -55,6 +52,7 @@ export default class BoardPresenter {
       case SortType.PRICE:
         return filteredPoint.sort(sortByPrice);
     }
+
     return filteredPoint;
   }
 
