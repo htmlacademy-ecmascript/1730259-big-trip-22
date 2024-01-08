@@ -48,9 +48,9 @@ export default class BoardPresenter {
 
     switch (this.#currentSortType) {
       case SortType.TIME:
-        return filteredPoint.sort(sortByTime);
+        return [...filteredPoint].sort(sortByTime);
       case SortType.PRICE:
-        return filteredPoint.sort(sortByPrice);
+        return [...filteredPoint].sort(sortByPrice);
     }
 
     return filteredPoint;
