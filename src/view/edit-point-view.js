@@ -160,7 +160,7 @@ function createEditPointTemplate(point, offers, destinations) {
               <span class="visually-hidden">Price</span>
               &euro;
             </label>
-            <input class="event__input  event__input--price" id="event-price-${id}" type="number" min="0" name="event-price" value=${basePrice} required>
+            <input class="event__input  event__input--price" id="event-price-${id}" type="number" min="1" max="100000" name="event-price" value=${basePrice} required>
           </div>
 
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -267,7 +267,7 @@ export default class EditPointView extends AbstractStatefulView {
     evt.preventDefault();
 
     this._setState({
-      basePrice: evt.target.value,
+      basePrice: Number(evt.target.value),
     });
   };
 
