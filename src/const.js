@@ -1,5 +1,3 @@
-const POINT_COUNT = 4;
-
 const MILLISECONDS_IN_HOUR = 3600000;
 const MILLISECONDS_IN_DAY = 86400000;
 
@@ -83,10 +81,27 @@ const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT',
 };
 
+const ApiMetod = {
+  GET: 'GET',
+  PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
+};
+
+const SERVER_URL = 'https://22.objects.pages.academy/big-trip';
+
+const BaseUrl = {
+  POINTS: 'points',
+  DESTINATIONS: 'destinations',
+  OFFERS: 'offers',
+};
+
+const AUTHORIZATION = 'Basic S3ZhemltOmthc2FuZHJh';
+
 export {
-  POINT_COUNT,
   MILLISECONDS_IN_HOUR,
   MILLISECONDS_IN_DAY,
   DateFormat,
@@ -101,4 +116,8 @@ export {
   COMMON_CONFIG,
   UserAction,
   UpdateType,
+  ApiMetod,
+  SERVER_URL,
+  BaseUrl,
+  AUTHORIZATION,
 };
