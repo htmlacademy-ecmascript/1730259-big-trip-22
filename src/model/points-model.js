@@ -67,7 +67,6 @@ export default class PointModel extends Observable {
     } catch (err) {
       throw new Error('Can\'t add point');
     }
-
   }
 
   async deletePoint(updateType, update) {
