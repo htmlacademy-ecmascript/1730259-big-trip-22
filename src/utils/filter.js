@@ -1,6 +1,6 @@
 import { FilterType } from '../const';
 import { isPointFuture, isPointPast, isPointPastAndFuture } from './date';
-
+// TODO Проверить фильтрацию
 const filter = {
   [FilterType.EVERYTHING]: (points) => points,
   [FilterType.FUTURE]: (points) => points.filter((point) => isPointFuture(point.dateFrom)),

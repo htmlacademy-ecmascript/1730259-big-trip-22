@@ -37,9 +37,9 @@ const getMinData = (items) => humanizeDate(dayjs.min(items.map((item) => dayjs(i
 
 const getMaxData = (items) => humanizeDate(dayjs.max(items.map((item) => dayjs(item.dateTo))), DateFormat.DAY_MONTH);
 
-const isPointFuture = (date) => date && dayjs().isAfter(date);
+const isPointFuture = (date) => date && dayjs(date).isAfter(dayjs().format());
 
-const isPointPast = (date) => date && dayjs().isBefore(date);
+const isPointPast = (date) => date && dayjs(date).isBefore(dayjs().format());
 
 const isPointPastAndFuture = (dateFrom, dateTo) => dayjs().isSameOrBefore(dateFrom) && dayjs().isSameOrAfter(dateTo);
 
