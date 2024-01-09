@@ -51,5 +51,6 @@ pointModel.init()
   .finally(() => {
     infoPresenter.init();
     filterPresenter.init();
+    addNewPointBtn.disabled = false;
   });
 boardPresenter.init();
