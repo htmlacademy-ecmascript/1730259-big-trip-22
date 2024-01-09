@@ -114,7 +114,6 @@ function createEditPointTemplate(point, offers, destinations) {
   const { id, type, dateFrom, dateTo, basePrice, offers: checkedOffers, destination: pointDestination } = point;
   const filteredOfferByType = getElementByType(offers, type);
   const filteredDestinationById = getElementById(destinations, pointDestination);
-
   const { name } = filteredDestinationById || {name: ''};
 
   return (
@@ -160,7 +159,7 @@ function createEditPointTemplate(point, offers, destinations) {
               <span class="visually-hidden">Price</span>
               &euro;
             </label>
-            <input class="event__input  event__input--price" id="event-price-${id}" type="number" min="0" name="event-price" value=${basePrice} required>
+            <input class="event__input  event__input--price" id="event-price-${id}" type="number" min="1" max="100000" name="event-price" value=${basePrice} required>
           </div>
 
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -227,8 +226,7 @@ export default class EditPointView extends AbstractStatefulView {
     this.#handleDeleteClick(this._state);
   };
 
-  #RollupButtonClick = (evt) => {
-    evt.preventDefault();
+  #RollupButtonClick = () => {
     this.#handleRollupButtonClick();
   };
 
@@ -247,7 +245,7 @@ export default class EditPointView extends AbstractStatefulView {
     const nextDestination = this.#destinations.find((destination) => destination.name === evt.target.value);
 
     if (validateInput.length === 0) {
-      evt.target.style.outlineColor = 'red';
+      evt.target.style.outline = '2px solid red';
     }
 
     if (nextDestination) {
@@ -263,16 +261,13 @@ export default class EditPointView extends AbstractStatefulView {
     });
   };
 
-  #cangePriceHandler = (evt) => {
+  #changePriceHandler = (evt) => {
     evt.preventDefault();
 
     this._setState({
-      basePrice: evt.target.value,
+      basePrice: Number(evt.target.value),
     });
   };
-
-  // TODO почему в этом блоке выпадает ошибка когда он не отрисован? this.element.querySelector('.event__available-offers')?.addEventListener('change',this.#changeOfferCheckedHandler);
-  // TODO сохранение работает при любом раскладе, нужно делать валидацию?
 
   _restoreHandlers() {
     this.element.querySelector('.event__rollup-btn')?.addEventListener('click', this.#RollupButtonClick);
@@ -280,7 +275,7 @@ export default class EditPointView extends AbstractStatefulView {
     this.element.querySelector('.event__type-group').addEventListener('change', this.#changeTypeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('input', this.#cityInputHandler);
     this.element.querySelector('.event__available-offers')?.addEventListener('change',this.#changeOfferCheckedHandler);
-    this.element.querySelector('.event__field-group--price').addEventListener('input', this.#cangePriceHandler);
+    this.element.querySelector('.event__field-group--price').addEventListener('input', this.#changePriceHandler);
     this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteClickHandler);
 
     this.#setDatePicker();

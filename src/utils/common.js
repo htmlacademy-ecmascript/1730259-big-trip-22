@@ -1,12 +1,3 @@
-function getRandomArrayElement(items) {
-  return items[Math.floor(Math.random() * items.length)];
-}
-
-function getRandomNumber(number) {
-  const randomNumber = Math.floor(Math.random() * (number - 0 + 1) + 0).toFixed(0);
-  return Number(randomNumber);
-}
-
 const capitalize = (item) => item.charAt(0).toUpperCase() + item.substring(1);
 
 const getDestinationNames = (destinations, points = undefined) => {
@@ -40,8 +31,6 @@ const isEscape = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 const sortByPrice = (a, b) => b.basePrice - a.basePrice;
 
 export {
-  getRandomArrayElement,
-  getRandomNumber,
   capitalize,
   getFullPrice,
   getElementByType,

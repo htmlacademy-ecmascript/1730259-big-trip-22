@@ -13,6 +13,10 @@ function createTitle(points, destinations) {
 }
 
 function createInfoTemplate(points, offers, destinations) {
+  if (points.length === 0) {
+    return '';
+  }
+
   return (
     `<section class="trip-main__trip-info  trip-info">
         <div class="trip-info__main">

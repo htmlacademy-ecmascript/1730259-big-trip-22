@@ -2,7 +2,7 @@ import { render, remove } from '../framework/render';
 import SystemMessageView from '../view/system-message-viev';
 import WeapointListView from '../view/waypoint-list-view';
 import SortListView from '../view/sort-list-view';
-import { FilterType, SortType, UpdateType, UserAction } from '../const';
+import { FilterType, SortType, SystemMessageLoad, UpdateType, UserAction } from '../const';
 import PointPresenter from './point-presenter';
 import { sortByPrice } from '../utils/common';
 import { sortByTime } from '../utils/date';
@@ -20,12 +20,10 @@ export default class BoardPresenter {
 
   #weapointListView = new WeapointListView();
 
-  #boardOffers = [];
-  #boardDestinations = [];
-
   #pointPresenters = new Map();
-  #currentSortType = SortType.DAY;
   #filterType = FilterType.EVERYTHING;
+  #currentSortType = SortType.DAY;
+  #isLoading = true;
 
   constructor({boardContainer, pointModel, filterModel, onNewPointDestroy}) {
     this.#boardContainer = boardContainer;
@@ -50,18 +48,15 @@ export default class BoardPresenter {
 
     switch (this.#currentSortType) {
       case SortType.TIME:
-        return filteredPoint.sort(sortByTime);
+        return [...filteredPoint].sort(sortByTime);
       case SortType.PRICE:
-        return filteredPoint.sort(sortByPrice);
+        return [...filteredPoint].sort(sortByPrice);
     }
 
     return filteredPoint;
   }
 
   init() {
-    this.#boardOffers = [...this.#pointModel.offers];
-    this.#boardDestinations = [...this.#pointModel.destinations];
-
     this.#renderBoard();
   }
 
@@ -101,7 +96,7 @@ export default class BoardPresenter {
   #handleModelEvent = (updateType, data) => {
     switch (updateType) {
       case UpdateType.PATCH:
-        this.#pointPresenters.get(data.id).init(data, this.#boardOffers, this.#boardDestinations);
+        this.#pointPresenters.get(data.id).init(data, this.#pointModel.offers, this.#pointModel.destinations);
         break;
       case UpdateType.MINOR:
         this.#clearBoard();
@@ -109,6 +104,11 @@ export default class BoardPresenter {
         break;
       case UpdateType.MAJOR:
         this.#clearBoard({resetSortType: true});
+        this.#renderBoard();
+        break;
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#systemMessageComponent);
         this.#renderBoard();
         break;
     }
@@ -150,15 +150,20 @@ export default class BoardPresenter {
     render(this.#sortListView, this.#boardContainer);
   }
 
-  #renderSystemMessage() {
-    this.#systemMessageComponent = new SystemMessageView({messageType: this.#filterType});
+  #renderSystemMessage(message) {
+    this.#systemMessageComponent = new SystemMessageView({messageType: message});
 
     render(this.#systemMessageComponent, this.#boardContainer);
   }
 
   #renderBoard() {
+    if (this.#isLoading) {
+      this.#renderSystemMessage(SystemMessageLoad.LOAD);
+      return;
+    }
+
     if (this.points.length === 0) {
-      this.#renderSystemMessage();
+      this.#renderSystemMessage(this.#filterType);
       return;
     }
 
@@ -168,8 +173,8 @@ export default class BoardPresenter {
 
     this.points.map((point) => this.#renderPoint({
       point: point,
-      offers: this.#boardOffers,
-      destinations: this.#boardDestinations
+      offers: this.#pointModel.offers,
+      destinations: this.#pointModel.destinations
     }));
   }
 }
