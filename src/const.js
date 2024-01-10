@@ -103,8 +103,13 @@ const BaseUrl = {
   OFFERS: 'offers',
 };
 
-const AUTHORIZATION = 'Basic S3ZhemltOmthc2FuZHJh';
+const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1000,
+};
 
+const AUTHORIZATION = 'Basic S3ZhemltOmthc2FuZHJh';
+// Basic S3ZhemltOmx1dGlraQ==
 export {
   MILLISECONDS_IN_HOUR,
   MILLISECONDS_IN_DAY,
@@ -124,4 +129,5 @@ export {
   SERVER_URL,
   BaseUrl,
   AUTHORIZATION,
+  TimeLimit,
 };

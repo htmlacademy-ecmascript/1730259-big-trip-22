@@ -33,12 +33,12 @@ const filterPresenter = new FilterPresenter({
 
 const boardPresenter = new BoardPresenter({
   boardContainer: containerElement,
-  onNewPointDestroy: handleNewTaskFormClose,
+  onNewPointDestroy: handleNewPointFormClose,
   pointModel,
   filterModel,
 });
 
-function handleNewTaskFormClose() {
+function handleNewPointFormClose() {
   addNewPointBtn.disabled = false;
 }
 
@@ -51,6 +51,5 @@ pointModel.init()
   .finally(() => {
     infoPresenter.init();
     filterPresenter.init();
-    addNewPointBtn.disabled = false;
   });
 boardPresenter.init();

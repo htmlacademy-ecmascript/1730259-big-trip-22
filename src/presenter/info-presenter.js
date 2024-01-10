@@ -11,8 +11,13 @@ export default class InfoPresenter {
   }
 
   init() {
+    const points = this.#pointModel.points;
+
+    if (points.length === 0) {
+      return;
+    }
     render(new InfoView({
-      points: this.#pointModel.points,
+      points: points,
       offers: this.#pointModel.offers,
       destinations: this.#pointModel.destinations,
     }), this.#infoContainer, RenderPosition.AFTERBEGIN);

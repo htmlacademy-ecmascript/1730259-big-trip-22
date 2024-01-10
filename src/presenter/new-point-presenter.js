@@ -10,9 +10,6 @@ export default class NewPointPresenter {
   #pointEditComponent = null;
   #pointModel = null;
 
-  #offers = null;
-  #destinations = null;
-
   constructor({pointListContainer, pointModel, onDataChange, onDestroy}) {
     this.#pointListContainer = pointListContainer;
     this.#handleDataChange = onDataChange;
@@ -21,16 +18,13 @@ export default class NewPointPresenter {
   }
 
   init() {
-    this.#offers = this.#pointModel.offers;
-    this.#destinations = this.#pointModel.destinations;
-
     if (this.#pointEditComponent !== null) {
       return;
     }
 
     this.#pointEditComponent = new EditPointView({
-      offers: this.#offers,
-      destinations: this.#destinations,
+      offers: this.#pointModel.offers,
+      destinations: this.#pointModel.destinations,
       onFormSubmit: this.#handleFormSubmit,
       onDeleteClick: this.#handleDeleteClick,
     });
@@ -53,14 +47,31 @@ export default class NewPointPresenter {
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   }
 
+  setSaving() {
+    this.#pointEditComponent.updateElement({
+      isDisabled: true,
+      isSaving: true,
+    });
+  }
+
+  setAborting() {
+    const resetFormState = () => {
+      this.#pointEditComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#pointEditComponent.shake(resetFormState);
+  }
+
   #handleFormSubmit = (point) => {
     this.#handleDataChange(
       UserAction.ADD_POINT,
       UpdateType.MINOR,
       point,
     );
-
-    this.destroy();
   };
 
   #handleDeleteClick = () => {
