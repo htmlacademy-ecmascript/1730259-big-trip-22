@@ -36,6 +36,7 @@ export default class InfoView extends AbstractView {
     this.offers = offers;
     this.destinations = destinations;
   }
+  // TODO надо ли менять точки маршрута, что бы они соответствовали каждому из фильтров,
 
   get template() {
     return createInfoTemplate(this.points, this.offers, this.destinations);
