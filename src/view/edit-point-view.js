@@ -1,4 +1,4 @@
-import { DEFAULT_POINT, DateFormat, POINTS_TYPE, COMMON_CONFIG } from '../const.js';
+import { DateFormat, POINTS_TYPE, COMMON_CONFIG } from '../const.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { capitalize, getElementById, getElementByType } from '../utils/common.js';
 import { humanizeDate } from '../utils/date.js';
@@ -120,6 +120,7 @@ function createEditPointTemplate(point, offers, destinations) {
     if (id === 0) {
       return 'Cancel';
     }
+
     return isDeleting ? 'Deleting...' : 'Delete';
   };
 
@@ -172,7 +173,7 @@ function createEditPointTemplate(point, offers, destinations) {
           </div>
 
           <button class="event__save-btn  btn  btn--blue" type="submit" ${isSubmitDisabled ? 'disabled' : ''}>${isSaving ? 'saving...' : 'Save'}</button>
-          <button class="event__reset-btn" type="reset">${createChanelOrDelete(id)}</button>
+          <button class="event__reset-btn" type="reset">${createChanelOrDelete(id, isDeleting)}</button>
           ${createRollupBtn(id)}
         </header>
         ${createDetailsTemplate(filteredOfferByType, checkedOffers, filteredDestinationById, isDisabled)}
@@ -190,7 +191,7 @@ export default class EditPointView extends AbstractStatefulView {
   #dateFromPicker = null;
   #dateToPicker = null;
 
-  constructor({point = DEFAULT_POINT, offers, destinations, onRollupButtonClick, onFormSubmit, onDeleteClick}) {
+  constructor({point, offers, destinations, onRollupButtonClick, onFormSubmit, onDeleteClick}) {
     super();
 
     this._setState(EditPointView.parsePointToState(point));
@@ -249,11 +250,11 @@ export default class EditPointView extends AbstractStatefulView {
 
   #cityInputHandler = (evt) => {
     const validateInput = this.#destinations.map((destination) => destination.name.toLowerCase())
-      .filter((name) => name.includes(evt.target.value.toLowerCase()));
+      .filter((name) => name.includes(evt.target.value.toLowerCase())).length === 0;
 
     const nextDestination = this.#destinations.find((destination) => destination.name === evt.target.value);
 
-    if (validateInput.length === 0) {
+    if (validateInput) {
       evt.target.style.outline = '2px solid red';
     }
 

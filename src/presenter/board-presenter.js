@@ -19,11 +19,11 @@ export default class BoardPresenter {
   #newPointPresenter = null;
 
   #weapointListView = new WeapointListView();
-
   #pointPresenters = new Map();
+
   #filterType = FilterType.EVERYTHING;
   #currentSortType = SortType.DAY;
-  #isLoading = true;
+
   #uiBlocker = new UIBlocker({
     lowerLimit: TimeLimit.LOWER_LIMIT,
     upperLimit: TimeLimit.UPPER_LIMIT,
@@ -138,7 +138,6 @@ export default class BoardPresenter {
         this.#renderBoard();
         break;
       case UpdateType.INIT:
-        this.#isLoading = false;
         remove(this.#systemMessageComponent);
         this.#renderBoard();
         break;
@@ -188,8 +187,13 @@ export default class BoardPresenter {
   }
 
   #renderBoard() {
-    if (this.#isLoading) {
+    if (this.#pointModel.loading) {
       this.#renderSystemMessage(SystemMessageLoad.LOAD);
+      return;
+    }
+
+    if (this.#pointModel.loadingFailed) {
+      this.#renderSystemMessage(SystemMessageLoad.FAILED_LOAD);
       return;
     }
 

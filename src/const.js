@@ -6,9 +6,6 @@ const MILLISECONDS_IN_HOUR = 3600000;
 const MILLISECONDS_IN_DAY = 86400000;
 
 const DateFormat = {
-  // DATETIME_ATTRIBUTE: 'YYYY-MM-DDTHH:mm',
-  // DAY: 'DD',
-  // MONTH: 'MMM',
   DATE_PICKER: 'd/m/y H:i',
   DAY_MONTH: 'D MMM',
   MONTH_DAY: 'MMM DD',

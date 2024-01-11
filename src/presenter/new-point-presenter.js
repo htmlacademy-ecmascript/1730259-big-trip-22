@@ -1,6 +1,6 @@
 import { RenderPosition, remove, render } from '../framework/render';
 import EditPointView from '../view/edit-point-view';
-import { UserAction, UpdateType } from '../const';
+import { UserAction, UpdateType, DEFAULT_POINT } from '../const';
 import { isEscape } from '../utils/common';
 
 export default class NewPointPresenter {
@@ -9,12 +9,14 @@ export default class NewPointPresenter {
   #handleDestroy = null;
   #pointEditComponent = null;
   #pointModel = null;
+  #point = [];
 
   constructor({pointListContainer, pointModel, onDataChange, onDestroy}) {
     this.#pointListContainer = pointListContainer;
     this.#handleDataChange = onDataChange;
     this.#handleDestroy = onDestroy;
     this.#pointModel = pointModel;
+    this.#point = DEFAULT_POINT;
   }
 
   init() {
@@ -23,6 +25,7 @@ export default class NewPointPresenter {
     }
 
     this.#pointEditComponent = new EditPointView({
+      point: this.#point,
       offers: this.#pointModel.offers,
       destinations: this.#pointModel.destinations,
       onFormSubmit: this.#handleFormSubmit,
