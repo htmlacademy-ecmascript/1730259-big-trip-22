@@ -6,9 +6,6 @@ const MILLISECONDS_IN_HOUR = 3600000;
 const MILLISECONDS_IN_DAY = 86400000;
 
 const DateFormat = {
-  // DATETIME_ATTRIBUTE: 'YYYY-MM-DDTHH:mm',
-  // DAY: 'DD',
-  // MONTH: 'MMM',
   DATE_PICKER: 'd/m/y H:i',
   DAY_MONTH: 'D MMM',
   MONTH_DAY: 'MMM DD',
@@ -103,8 +100,13 @@ const BaseUrl = {
   OFFERS: 'offers',
 };
 
-const AUTHORIZATION = 'Basic S3ZhemltOmthc2FuZHJh';
+const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1000,
+};
 
+const AUTHORIZATION = 'Basic S3ZhemltOmthc2FuZHJh';
+// Basic S3ZhemltOmx1dGlraQ==
 export {
   MILLISECONDS_IN_HOUR,
   MILLISECONDS_IN_DAY,
@@ -124,4 +126,5 @@ export {
   SERVER_URL,
   BaseUrl,
   AUTHORIZATION,
+  TimeLimit,
 };

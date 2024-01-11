@@ -1,14 +1,14 @@
 import { render, remove } from '../framework/render';
+import UIBlocker from '../framework/ui-blocker/ui-blocker';
 import SystemMessageView from '../view/system-message-viev';
 import WeapointListView from '../view/waypoint-list-view';
 import SortListView from '../view/sort-list-view';
-import { FilterType, SortType, SystemMessageLoad, UpdateType, UserAction } from '../const';
+import { FilterType, SortType, SystemMessageLoad, TimeLimit, UpdateType, UserAction } from '../const';
 import PointPresenter from './point-presenter';
 import { sortByPrice } from '../utils/common';
 import { sortByTime } from '../utils/date';
 import { filter } from '../utils/filter';
 import NewPointPresenter from './new-point-presenter';
-
 
 export default class BoardPresenter {
   #boardContainer = null;
@@ -19,11 +19,15 @@ export default class BoardPresenter {
   #newPointPresenter = null;
 
   #weapointListView = new WeapointListView();
-
   #pointPresenters = new Map();
+
   #filterType = FilterType.EVERYTHING;
   #currentSortType = SortType.DAY;
-  #isLoading = true;
+
+  #uiBlocker = new UIBlocker({
+    lowerLimit: TimeLimit.LOWER_LIMIT,
+    upperLimit: TimeLimit.UPPER_LIMIT,
+  });
 
   constructor({boardContainer, pointModel, filterModel, onNewPointDestroy}) {
     this.#boardContainer = boardContainer;
@@ -64,6 +68,14 @@ export default class BoardPresenter {
   createPoint() {
     this.#currentSortType = SortType.DAY;
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+
+    // TODO не отрисовывается задача
+
+    // if (this.#systemMessageComponent) {
+    //   render(this.#weapointListView, this.#boardContainer);
+    //   remove(this.#systemMessageComponent);
+    // }
+
     this.#newPointPresenter.init();
   }
 
@@ -79,18 +91,37 @@ export default class BoardPresenter {
     this.#pointPresenters.set(point.id, pointPresenter);
   }
 
-  #handleViewAction = (actionType, updateType, update) => {
+  #handleViewAction = async (actionType, updateType, update) => {
+    this.#uiBlocker.block();
+
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this.#pointModel.updatePoint(updateType, update);
+        this.#pointPresenters.get(update.id).setSaving();
+        try {
+          await this.#pointModel.updatePoint(updateType, update);
+        } catch (error) {
+          this.#pointPresenters.get(update.id).setAborting();
+        }
         break;
       case UserAction.ADD_POINT:
-        this.#pointModel.addPoint(updateType, update);
+        this.#newPointPresenter.setSaving();
+        try {
+          await this.#pointModel.addPoint(updateType, update);
+        } catch (error) {
+          this.#newPointPresenter.setAborting();
+        }
         break;
       case UserAction.DELETE_POINT:
-        this.#pointModel.deletePoint(updateType, update);
+        this.#pointPresenters.get(update.id).setDeleting();
+        try {
+          await this.#pointModel.deletePoint(updateType, update);
+        } catch (error) {
+          this.#pointPresenters.get(update.id).setAborting();
+        }
         break;
     }
+
+    this.#uiBlocker.unblock();
   };
 
   #handleModelEvent = (updateType, data) => {
@@ -107,7 +138,6 @@ export default class BoardPresenter {
         this.#renderBoard();
         break;
       case UpdateType.INIT:
-        this.#isLoading = false;
         remove(this.#systemMessageComponent);
         this.#renderBoard();
         break;
@@ -157,8 +187,13 @@ export default class BoardPresenter {
   }
 
   #renderBoard() {
-    if (this.#isLoading) {
+    if (this.#pointModel.loading) {
       this.#renderSystemMessage(SystemMessageLoad.LOAD);
+      return;
+    }
+
+    if (this.#pointModel.loadingFailed) {
+      this.#renderSystemMessage(SystemMessageLoad.FAILED_LOAD);
       return;
     }
 
