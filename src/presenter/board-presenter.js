@@ -69,11 +69,11 @@ export default class BoardPresenter {
     this.#currentSortType = SortType.DAY;
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
 
-    // TODO не отрисовывается задача
+    // TODO не пойму как восстановить системное сообщение
 
     if (this.#systemMessageComponent) {
       render(this.#weapointListView, this.#boardContainer);
-      // remove(this.#systemMessageComponent);
+      remove(this.#systemMessageComponent);
     }
 
     this.#newPointPresenter.init();
