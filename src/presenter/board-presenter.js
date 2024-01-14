@@ -71,10 +71,10 @@ export default class BoardPresenter {
 
     // TODO не отрисовывается задача
 
-    // if (this.#systemMessageComponent) {
-    //   render(this.#weapointListView, this.#boardContainer);
-    //   remove(this.#systemMessageComponent);
-    // }
+    if (this.#systemMessageComponent) {
+      render(this.#weapointListView, this.#boardContainer);
+      // remove(this.#systemMessageComponent);
+    }
 
     this.#newPointPresenter.init();
   }

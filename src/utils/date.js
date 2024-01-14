@@ -25,10 +25,10 @@ function getDifferenceInTime(start, end) {
     case difference < MILLISECONDS_IN_HOUR:
       return dayjs(difference).format(DateFormat.MINUTES_WITH_POSTFIX);
 
-    case difference > MILLISECONDS_IN_HOUR && difference < MILLISECONDS_IN_DAY:
+    case difference >= MILLISECONDS_IN_HOUR && difference < MILLISECONDS_IN_DAY:
       return dayjs(difference).format(DateFormat.HOUR_MINUTES_WITH_POSTFIX);
 
-    case difference > MILLISECONDS_IN_DAY:
+    case difference >= MILLISECONDS_IN_DAY:
       return dayjs(difference).format(DateFormat.DAY_HOUR_MINUTES_WITH_POSTFIX);
   }
 }
