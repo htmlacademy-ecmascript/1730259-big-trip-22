@@ -69,14 +69,18 @@ export default class BoardPresenter {
     this.#currentSortType = SortType.DAY;
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
 
-    // TODO не пойму как восстановить системное сообщение
-
     if (this.#systemMessageComponent) {
       render(this.#weapointListView, this.#boardContainer);
       remove(this.#systemMessageComponent);
     }
 
     this.#newPointPresenter.init();
+  }
+
+  recoverSystemMessage() {
+    if (this.points.length === 0) {
+      this.#renderSystemMessage(this.#filterType);
+    }
   }
 
   #renderPoint({point, offers, destinations}) {

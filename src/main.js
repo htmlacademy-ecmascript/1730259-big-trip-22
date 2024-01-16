@@ -40,6 +40,7 @@ const boardPresenter = new BoardPresenter({
 
 function handleNewPointFormClose() {
   addNewPointBtn.disabled = false;
+  boardPresenter.recoverSystemMessage();
 }
 
 function handleNewPointButtonClick() {

@@ -106,7 +106,7 @@ const TimeLimit = {
 };
 
 const AUTHORIZATION = 'Basic S3ZhemltOmthc2FuZHJh';
-// Basic S3ZhemltOmx1dGlraQ==
+
 export {
   MILLISECONDS_IN_HOUR,
   MILLISECONDS_IN_DAY,

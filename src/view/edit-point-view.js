@@ -252,7 +252,7 @@ export default class EditPointView extends AbstractStatefulView {
     const validateInput = this.#destinations.map((destination) => destination.name.toLowerCase())
       .filter((name) => name.includes(evt.target.value.toLowerCase())).length === 0;
 
-    const nextDestination = this.#destinations.find((destination) => destination.name === evt.target.value);
+    const nextDestination = this.#destinations.find((destination) => destination.name.toLowerCase() === evt.target.value.toLowerCase());
 
     if (validateInput) {
       evt.target.style.outline = '2px solid red';
@@ -292,13 +292,13 @@ export default class EditPointView extends AbstractStatefulView {
   }
 
   #dateFromChanheHandler = ([userDate]) => {
-    this.updateElement({
+    this._setState({
       dateFrom: userDate.toISOString(),
     });
   };
 
   #dateToChanheHandler = ([userDate]) => {
-    this.updateElement({
+    this._setState({
       dateTo: userDate.toISOString(),
     });
   };
