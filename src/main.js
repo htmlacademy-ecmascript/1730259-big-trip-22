@@ -14,7 +14,6 @@ const main = document.querySelector('.page-main');
 const containerElement = main.querySelector('.trip-events');
 
 const addNewPointBtn = document.querySelector('.trip-main__event-add-btn');
-
 addNewPointBtn.addEventListener('click', handleNewPointButtonClick);
 
 const pointModel = new PointModel({pointApiService: new PointApiService(SERVER_URL, AUTHORIZATION)});
@@ -32,6 +31,7 @@ const filterPresenter = new FilterPresenter({
 });
 
 const boardPresenter = new BoardPresenter({
+  addNewPointBtn,
   boardContainer: containerElement,
   onNewPointDestroy: handleNewPointFormClose,
   pointModel,
