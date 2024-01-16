@@ -19,17 +19,17 @@ function humanizeDate(date, format) {
 }
 
 function getDifferenceInTime(start, end) {
-  const difference = dayjs(end).diff(start);
+  const difference = dayjs(end).diff(dayjs(start));
 
   switch (true) {
     case difference < MILLISECONDS_IN_HOUR:
-      return dayjs(difference).format(DateFormat.MINUTES_WITH_POSTFIX);
+      return dayjs.duration(difference).format(DateFormat.MINUTES_WITH_POSTFIX);
 
-    case difference > MILLISECONDS_IN_HOUR && difference < MILLISECONDS_IN_DAY:
-      return dayjs(difference).format(DateFormat.HOUR_MINUTES_WITH_POSTFIX);
+    case difference >= MILLISECONDS_IN_HOUR && difference < MILLISECONDS_IN_DAY:
+      return dayjs.duration(difference).format(DateFormat.HOUR_MINUTES_WITH_POSTFIX);
 
-    case difference > MILLISECONDS_IN_DAY:
-      return dayjs(difference).format(DateFormat.DAY_HOUR_MINUTES_WITH_POSTFIX);
+    case difference >= MILLISECONDS_IN_DAY:
+      return dayjs.duration(difference).format(DateFormat.DAY_HOUR_MINUTES_WITH_POSTFIX);
   }
 }
 

@@ -57,9 +57,6 @@ export default class PointApiService extends ApiService {
       'date_to': point.dateTo,
       'is_favorite': point.isFavorite,
     };
-    // TODO Как в лайве не работает
-    // 'date_from': point.dateFrom instanceof Date ? point.dateFrom.toISOString() : null,
-    // 'date_to': point.dateTo instanceof Date ? point.dateTo.toISOString() : null,
 
     if (point.id === 0) {
       delete adaptedPoint.id;

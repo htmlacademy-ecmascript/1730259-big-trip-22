@@ -11,6 +11,7 @@ import { filter } from '../utils/filter';
 import NewPointPresenter from './new-point-presenter';
 
 export default class BoardPresenter {
+  #addNewPointBtn = null;
   #boardContainer = null;
   #pointModel = null;
   #systemMessageComponent = null;
@@ -29,10 +30,13 @@ export default class BoardPresenter {
     upperLimit: TimeLimit.UPPER_LIMIT,
   });
 
-  constructor({boardContainer, pointModel, filterModel, onNewPointDestroy}) {
+  constructor({addNewPointBtn, boardContainer, pointModel, filterModel, onNewPointDestroy}) {
+    this.#addNewPointBtn = addNewPointBtn;
     this.#boardContainer = boardContainer;
     this.#pointModel = pointModel;
     this.#filterModel = filterModel;
+
+    this.#addNewPointBtn.disabled = true;
 
     this.#newPointPresenter = new NewPointPresenter({
       pointListContainer: this.#weapointListView.element,
@@ -69,14 +73,18 @@ export default class BoardPresenter {
     this.#currentSortType = SortType.DAY;
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
 
-    // TODO не отрисовывается задача
-
-    // if (this.#systemMessageComponent) {
-    //   render(this.#weapointListView, this.#boardContainer);
-    //   remove(this.#systemMessageComponent);
-    // }
+    if (this.#systemMessageComponent) {
+      render(this.#weapointListView, this.#boardContainer);
+      remove(this.#systemMessageComponent);
+    }
 
     this.#newPointPresenter.init();
+  }
+
+  recoverSystemMessage() {
+    if (this.points.length === 0) {
+      this.#renderSystemMessage(this.#filterType);
+    }
   }
 
   #renderPoint({point, offers, destinations}) {
@@ -199,8 +207,11 @@ export default class BoardPresenter {
 
     if (this.points.length === 0) {
       this.#renderSystemMessage(this.#filterType);
+      this.#addNewPointBtn.disabled = false;
       return;
     }
+
+    this.#addNewPointBtn.disabled = false;
 
     this.#renderSort();
 
