@@ -57,8 +57,8 @@ const POINTS_TYPE = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-i
 const DEFAULT_POINT = {
   id: 0,
   basePrice: 0,
-  dateFrom: dayjs.utc().format(),
-  dateTo: dayjs.utc().format(),
+  dateFrom: null,
+  dateTo: null,
   destination: '',
   isFavorite: false,
   offers: [],

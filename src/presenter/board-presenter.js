@@ -6,7 +6,7 @@ import SortListView from '../view/sort-list-view';
 import { FilterType, SortType, SystemMessageLoad, TimeLimit, UpdateType, UserAction } from '../const';
 import PointPresenter from './point-presenter';
 import { sortByPrice } from '../utils/common';
-import { sortByTime } from '../utils/date';
+import { sortByTime, sortByDay } from '../utils/date';
 import { filter } from '../utils/filter';
 import NewPointPresenter from './new-point-presenter';
 
@@ -59,6 +59,8 @@ export default class BoardPresenter {
         return [...filteredPoint].sort(sortByTime);
       case SortType.PRICE:
         return [...filteredPoint].sort(sortByPrice);
+      case SortType.DAY:
+        return [...filteredPoint].sort(sortByDay);
     }
 
     return filteredPoint;

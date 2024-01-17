@@ -45,6 +45,8 @@ const isPointPastAndFuture = (dateFrom, dateTo) => dayjs(dateFrom).isSameOrBefor
 
 const sortByTime = (a, b) => dayjs(a.dateFrom).diff(a.dateTo) - dayjs(b.dateFrom).diff(b.dateTo);
 
+const sortByDay = (a, b) => dayjs(a.dateFrom) - dayjs(b.dateFrom);
+
 export {
   humanizeDate,
   getDifferenceInTime,
@@ -54,4 +56,5 @@ export {
   isPointPast,
   isPointPastAndFuture,
   sortByTime,
+  sortByDay,
 };
