@@ -29,7 +29,7 @@ function getDifferenceInTime(start, end) {
       return dayjs.duration(difference).format(DateFormat.HOUR_MINUTES_WITH_POSTFIX);
 
     case difference >= MILLISECONDS_IN_DAY:
-      return `${Math.floor(dayjs.duration(difference).asDays())}D ${dayjs.duration(difference).format(DateFormat.HOUR_MINUTES_WITH_POSTFIX)}`;
+      return Math.floor(dayjs.duration(difference).asDays()) < 10 ? `0${Math.floor(dayjs.duration(difference).asDays())}D ${dayjs.duration(difference).format(DateFormat.HOUR_MINUTES_WITH_POSTFIX)}` : `${Math.floor(dayjs.duration(difference).asDays())}D ${dayjs.duration(difference).format(DateFormat.HOUR_MINUTES_WITH_POSTFIX)}`;
   }
 }
 
