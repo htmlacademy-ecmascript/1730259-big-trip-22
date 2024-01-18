@@ -13,7 +13,6 @@ const DateFormat = {
   DAY_MONTH_YEAR: 'DD/MM/YY[&nbsp;]HH:mm',
   MINUTES_WITH_POSTFIX: 'mm[M]',
   HOUR_MINUTES_WITH_POSTFIX: 'HH[H] mm[M]',
-  DAY_HOUR_MINUTES_WITH_POSTFIX: 'DD[D] HH[H] mm[M]'
 };
 
 const COMMON_CONFIG = {
@@ -57,8 +56,8 @@ const POINTS_TYPE = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-i
 const DEFAULT_POINT = {
   id: 0,
   basePrice: 0,
-  dateFrom: null,
-  dateTo: null,
+  dateFrom: dayjs.utc().format(),
+  dateTo: dayjs.utc().format(),
   destination: '',
   isFavorite: false,
   offers: [],
