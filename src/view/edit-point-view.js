@@ -152,7 +152,7 @@ function createEditPointTemplate(point, offers, destinations) {
             </label>
             <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value='${he.encode(name)}' list="destination-list-${id}" autocomplete="off" ${isDisabled ? 'disabled' : ''} required>
             <datalist id="destination-list-${id}">
-              ${destinations.map((item) => `<option value=${item.name}></option>`)}
+              ${destinations.map((item) => `<option value="${item.name}"></option>`)}
             </datalist>
           </div>
 
@@ -295,12 +295,14 @@ export default class EditPointView extends AbstractStatefulView {
     this._setState({
       dateFrom: userDate.toISOString(),
     });
+    this.#setDatePicker();
   };
 
   #dateToChanheHandler = ([userDate]) => {
     this._setState({
       dateTo: userDate.toISOString(),
     });
+    this.#setDatePicker();
   };
 
   #setDatePicker() {
