@@ -18,6 +18,7 @@ export default class InfoPresenter {
     const points = this.#pointModel.points;
 
     if (points.length === 0) {
+      remove(prevInfoComponent);
       return;
     }
 
