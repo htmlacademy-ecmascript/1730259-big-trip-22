@@ -291,18 +291,16 @@ export default class EditPointView extends AbstractStatefulView {
     this.#setDatePicker();
   }
 
-  #dateFromChanheHandler = ([userDate]) => {
+  #dateFromChangeHandler = ([userDate]) => {
     this._setState({
       dateFrom: userDate.toISOString(),
     });
-    this.#setDatePicker();
   };
 
-  #dateToChanheHandler = ([userDate]) => {
+  #dateToChangeHandler = ([userDate]) => {
     this._setState({
       dateTo: userDate.toISOString(),
     });
-    this.#setDatePicker();
   };
 
   #setDatePicker() {
@@ -312,14 +310,14 @@ export default class EditPointView extends AbstractStatefulView {
       ...COMMON_CONFIG,
       defaultDate: this._state.dateFrom,
       maxDate: this._state.dateTo,
-      onChange: this.#dateFromChanheHandler,
+      onChange: this.#dateFromChangeHandler,
     });
 
     this.#dateToPicker = flatpickr(dateToElement, {
       ...COMMON_CONFIG,
       defaultDate: this._state.dateTo,
       minDate: this._state.dateFrom,
-      onChange: this.#dateToChanheHandler,
+      onChange: this.#dateToChangeHandler,
     });
   }
 

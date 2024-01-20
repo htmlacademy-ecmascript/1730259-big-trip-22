@@ -10,10 +10,12 @@ const getDestinationNames = (destinations, points = undefined) => {
 
 const getFullPrice = (points , offers) => {
   const baseFullPrice = points.map((point) => point.basePrice).reduce((accumulator, value) => accumulator + value, 0);
-  const offerPoints = points.map((point) => point.offers).flat(Infinity);
-  const newOffers = offers.map((offer) => offer.offers).flat().filter((item) => offerPoints.find((offer) => offer === item.id)).map((item) => item.price).reduce((accumulator, value) => accumulator + value, 0);
+  const newOffers = offers.map((offer) => offer.offers).flat();
+  const offerPointsPrice = points.map((point) => point.offers).flat(Infinity)
+    .map((item) => newOffers.find((offer) => offer.id === item))
+    .map((item) => item.price).reduce((accumulator, value) => accumulator + value, 0);
 
-  return baseFullPrice + newOffers;
+  return baseFullPrice + offerPointsPrice;
 };
 
 const getElementByType = (elements, type) => elements.find((element) => element.type === type);

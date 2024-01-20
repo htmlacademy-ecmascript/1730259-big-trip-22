@@ -1,4 +1,4 @@
-import { RenderPosition, remove, render, replace } from '../framework/render';
+import { RenderPosition, remove, render } from '../framework/render';
 import InfoView from '../view/info-view';
 
 export default class InfoPresenter {
@@ -14,27 +14,22 @@ export default class InfoPresenter {
   }
 
   init() {
-    const prevInfoComponent = this.#infoComponent;
-    const points = this.#pointModel.points;
-
-    if (points.length === 0) {
-      remove(prevInfoComponent);
-      return;
+    if (this.#infoComponent !== null) {
+      remove(this.#infoComponent);
     }
 
     this.#infoComponent = new InfoView({
-      points: points,
+      points: this.#pointModel.points,
       offers: this.#pointModel.offers,
       destinations: this.#pointModel.destinations,
     });
 
-    if (prevInfoComponent === null) {
-      render(this.#infoComponent, this.#infoContainer, RenderPosition.AFTERBEGIN);
+    if (this.#pointModel.points.length === 0) {
+      remove(this.#infoComponent);
       return;
     }
 
-    replace(this.#infoComponent, prevInfoComponent);
-    remove(prevInfoComponent);
+    render(this.#infoComponent, this.#infoContainer, RenderPosition.AFTERBEGIN);
   }
 
   #handleModelEvent = () => {
