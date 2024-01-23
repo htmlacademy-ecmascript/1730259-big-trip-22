@@ -9,8 +9,8 @@ export default class PointPresenter {
   #pointComponent = null;
   #pointEditComponent = null;
 
-  #handleDataChange = null;
-  #handleModeChange = null;
+  #dataChangeHandler = null;
+  #modeChangeHandler = null;
 
   #point = null;
   #offers = null;
@@ -19,8 +19,8 @@ export default class PointPresenter {
 
   constructor({pointListContainer, onDataChange, onModeChange}) {
     this.#pointListContainer = pointListContainer;
-    this.#handleDataChange = onDataChange;
-    this.#handleModeChange = onModeChange;
+    this.#dataChangeHandler = onDataChange;
+    this.#modeChangeHandler = onModeChange;
   }
 
   init (point, offers, destinations) {
@@ -35,8 +35,8 @@ export default class PointPresenter {
       point: this.#point,
       offers: this.#offers,
       destinations: this.#destinations,
-      onFavoritClick: this.#handleFavoriteClick,
-      onEditClick: this.#handleEditClick,
+      onFavoritClick: this.#favoriteClickHandler,
+      onEditClick: this.#editClickHandler,
     });
 
     this.#pointEditComponent = new EditPointView({
@@ -44,8 +44,8 @@ export default class PointPresenter {
       offers: this.#offers,
       destinations: this.#destinations,
       onRollupButtonClick: this.#hideCardEdit,
-      onFormSubmit: this.#handleFormSubmit,
-      onDeleteClick: this.#handleDeleteClick,
+      onFormSubmit: this.#formSubmitHandler,
+      onDeleteClick: this.#deleteClickHandler,
     });
 
     if (prevPointComponent === null || prevPointEditComponent === null) {
@@ -116,7 +116,7 @@ export default class PointPresenter {
   #replaceCardToForm() {
     replace(this.#pointEditComponent, this.#pointComponent);
     document.addEventListener('keydown', this.#escKeyDownHandler);
-    this.#handleModeChange();
+    this.#modeChangeHandler();
     this.#mode = Mode.EDITING;
   }
 
@@ -134,16 +134,16 @@ export default class PointPresenter {
     }
   };
 
-  #handleFormSubmit = (point) => {
-    this.#handleDataChange(
+  #formSubmitHandler = (point) => {
+    this.#dataChangeHandler(
       UserAction.UPDATE_POINT,
       UpdateType.MINOR,
       point
     );
   };
 
-  #handleDeleteClick = (point) => {
-    this.#handleDataChange(
+  #deleteClickHandler = (point) => {
+    this.#dataChangeHandler(
       UserAction.DELETE_POINT,
       UpdateType.MINOR,
       point,
@@ -155,12 +155,12 @@ export default class PointPresenter {
     this.#replaceFormToCard();
   };
 
-  #handleEditClick = () => {
+  #editClickHandler = () => {
     this.#replaceCardToForm();
   };
 
-  #handleFavoriteClick = () => {
-    this.#handleDataChange(
+  #favoriteClickHandler = () => {
+    this.#dataChangeHandler(
       UserAction.UPDATE_POINT,
       UpdateType.PATCH,
       {...this.#point, isFavorite: !this.#point.isFavorite},

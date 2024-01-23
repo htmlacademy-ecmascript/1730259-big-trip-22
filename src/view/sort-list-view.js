@@ -23,26 +23,26 @@ function createSortListTemplate(currentSortType) {
 
 export default class SortListView extends AbstractView {
   #currentSortType = null;
-  #handleSortTypeChange = null;
+  #sortTypeChangeHandler = null;
 
   constructor({ currentSortType, onSortTypeChange}) {
     super();
 
     this.#currentSortType = currentSortType;
-    this.#handleSortTypeChange = onSortTypeChange;
+    this.#sortTypeChangeHandler = onSortTypeChange;
 
-    this.element.addEventListener('change', this.#sortTypeChangeHandler);
+    this.element.addEventListener('change', this.#formChangeHandler);
   }
 
   get template() {
     return createSortListTemplate(this.#currentSortType);
   }
 
-  #sortTypeChangeHandler = (evt) => {
+  #formChangeHandler = (evt) => {
     evt.preventDefault();
 
     const targetType = evt.target.id.match(REG_EXP_SORT) ? evt.target.id.match(REG_EXP_SORT)[1] : '';
 
-    this.#handleSortTypeChange(targetType);
+    this.#sortTypeChangeHandler(targetType);
   };
 }

@@ -41,12 +41,12 @@ export default class BoardPresenter {
     this.#newPointPresenter = new NewPointPresenter({
       pointListContainer: this.#weapointListView.element,
       pointModel: this.#pointModel,
-      onDataChange: this.#handleViewAction,
+      onDataChange: this.#viewActionHandler,
       onDestroy: onNewPointDestroy
     });
 
-    this.#pointModel.addObserver(this.#handleModelEvent);
-    this.#filterModel.addObserver(this.#handleModelEvent);
+    this.#pointModel.addObserver(this.#modelEventHandler);
+    this.#filterModel.addObserver(this.#modelEventHandler);
   }
 
   get points() {
@@ -92,8 +92,8 @@ export default class BoardPresenter {
   #renderPoint({point, offers, destinations}) {
     const pointPresenter = new PointPresenter({
       pointListContainer: this.#weapointListView.element,
-      onDataChange: this.#handleViewAction,
-      onModeChange: this.#handleModeChange
+      onDataChange: this.#viewActionHandler,
+      onModeChange: this.#modeChangeHandler
     });
 
     pointPresenter.init(point, offers, destinations);
@@ -101,7 +101,7 @@ export default class BoardPresenter {
     this.#pointPresenters.set(point.id, pointPresenter);
   }
 
-  #handleViewAction = async (actionType, updateType, update) => {
+  #viewActionHandler = async (actionType, updateType, update) => {
     this.#uiBlocker.block();
 
     switch (actionType) {
@@ -134,7 +134,7 @@ export default class BoardPresenter {
     this.#uiBlocker.unblock();
   };
 
-  #handleModelEvent = (updateType, data) => {
+  #modelEventHandler = (updateType, data) => {
     switch (updateType) {
       case UpdateType.PATCH:
         this.#pointPresenters.get(data.id).init(data, this.#pointModel.offers, this.#pointModel.destinations);
@@ -154,12 +154,12 @@ export default class BoardPresenter {
     }
   };
 
-  #handleModeChange = () => {
+  #modeChangeHandler = () => {
     this.#newPointPresenter.destroy();
     this.#pointPresenters.forEach((pointPresenter) => pointPresenter.resetView());
   };
 
-  #handleSortTypeChange = (sortType) => {
+  #sortTypeChangeHandler = (sortType) => {
     this.#currentSortType = sortType;
     this.#clearBoard();
     this.#renderBoard();
@@ -184,7 +184,7 @@ export default class BoardPresenter {
   #renderSort() {
     this.#sortListView = new SortListView({
       currentSortType: this.#currentSortType,
-      onSortTypeChange: this.#handleSortTypeChange,
+      onSortTypeChange: this.#sortTypeChangeHandler,
     });
 
     render(this.#sortListView, this.#boardContainer);

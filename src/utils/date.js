@@ -43,9 +43,9 @@ const isPointPast = (date) => date && dayjs(date).isBefore(dayjs().format());
 
 const isPointPastAndFuture = (dateFrom, dateTo) => dayjs(dateFrom).isSameOrBefore(dayjs().format()) && dayjs(dateTo).isSameOrAfter(dayjs().format());
 
-const sortByTime = (a, b) => dayjs(a.dateFrom).diff(a.dateTo) - dayjs(b.dateFrom).diff(b.dateTo);
+const sortByTime = (pointFirst, pointSecond) => dayjs(pointFirst.dateFrom).diff(pointFirst.dateTo) - dayjs(pointSecond.dateFrom).diff(pointSecond.dateTo);
 
-const sortByDay = (a, b) => dayjs(a.dateFrom) - dayjs(b.dateFrom);
+const sortByDay = (pointFirst, pointSecond) => dayjs(pointFirst.dateFrom) - dayjs(pointSecond.dateFrom);
 
 export {
   humanizeDate,

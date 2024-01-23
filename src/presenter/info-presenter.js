@@ -10,7 +10,7 @@ export default class InfoPresenter {
     this.#infoContainer = infoContainer;
     this.#pointModel = pointModel;
 
-    this.#pointModel.addObserver(this.#handleModelEvent);
+    this.#pointModel.addObserver(this.#modelEventHandler);
   }
 
   init() {
@@ -32,7 +32,7 @@ export default class InfoPresenter {
     render(this.#infoComponent, this.#infoContainer, RenderPosition.AFTERBEGIN);
   }
 
-  #handleModelEvent = () => {
+  #modelEventHandler = () => {
     this.init();
   };
 }
