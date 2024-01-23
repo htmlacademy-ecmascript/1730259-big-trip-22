@@ -185,9 +185,9 @@ function createEditPointTemplate(point, offers, destinations) {
 export default class EditPointView extends AbstractStatefulView {
   #offers = null;
   #destinations = null;
-  #handleFormSubmit = null;
-  #handleRollupButtonClick = null;
-  #handleDeleteClick = null;
+  #formSubmitHandler = null;
+  #rollupButtonHandler = null;
+  #deleteClickHandler = null;
   #dateFromPicker = null;
   #dateToPicker = null;
 
@@ -197,9 +197,9 @@ export default class EditPointView extends AbstractStatefulView {
     this._setState(EditPointView.parsePointToState(point));
     this.#offers = offers;
     this.#destinations = destinations;
-    this.#handleFormSubmit = onFormSubmit;
-    this.#handleDeleteClick = onDeleteClick;
-    this.#handleRollupButtonClick = onRollupButtonClick;
+    this.#formSubmitHandler = onFormSubmit;
+    this.#deleteClickHandler = onDeleteClick;
+    this.#rollupButtonHandler = onRollupButtonClick;
 
     this._restoreHandlers();
   }
@@ -226,21 +226,21 @@ export default class EditPointView extends AbstractStatefulView {
     }
   }
 
-  #formSubmitHandler = (evt) => {
+  #formSubmitClickHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFormSubmit(EditPointView.parseStateToPoint(this._state));
+    this.#formSubmitHandler(EditPointView.parseStateToPoint(this._state));
   };
 
   #formDeleteClickHandler = (evt) => {
     evt.preventDefault();
-    this.#handleDeleteClick(EditPointView.parseStateToPoint(this._state));
+    this.#deleteClickHandler(EditPointView.parseStateToPoint(this._state));
   };
 
-  #RollupButtonClick = () => {
-    this.#handleRollupButtonClick();
+  #rollupButtonClickHandler = () => {
+    this.#rollupButtonHandler();
   };
 
-  #changeTypeHandler = (evt) => {
+  #typeChangeHandler = (evt) => {
     evt.preventDefault();
 
     this.updateElement({
@@ -265,13 +265,13 @@ export default class EditPointView extends AbstractStatefulView {
     }
   };
 
-  #changeOfferCheckedHandler = () => {
+  #offersCheckedChangeHandler = () => {
     this._setState({
       offers: Array.from(this.element.querySelectorAll('.event__offer-checkbox:checked')).map((item) => item.id),
     });
   };
 
-  #changePriceHandler = (evt) => {
+  #priceChangeHandler = (evt) => {
     evt.preventDefault();
 
     this._setState({
@@ -280,12 +280,12 @@ export default class EditPointView extends AbstractStatefulView {
   };
 
   _restoreHandlers() {
-    this.element.querySelector('.event__rollup-btn')?.addEventListener('click', this.#RollupButtonClick);
-    this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
-    this.element.querySelector('.event__type-group').addEventListener('change', this.#changeTypeHandler);
+    this.element.querySelector('.event__rollup-btn')?.addEventListener('click', this.#rollupButtonClickHandler);
+    this.element.querySelector('form').addEventListener('submit', this.#formSubmitClickHandler);
+    this.element.querySelector('.event__type-group').addEventListener('change', this.#typeChangeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('input', this.#cityInputHandler);
-    this.element.querySelector('.event__available-offers')?.addEventListener('change',this.#changeOfferCheckedHandler);
-    this.element.querySelector('.event__field-group--price').addEventListener('input', this.#changePriceHandler);
+    this.element.querySelector('.event__available-offers')?.addEventListener('change',this.#offersCheckedChangeHandler);
+    this.element.querySelector('.event__field-group--price').addEventListener('input', this.#priceChangeHandler);
     this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteClickHandler);
 
     this.#setDatePicker();

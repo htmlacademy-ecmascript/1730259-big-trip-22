@@ -5,18 +5,18 @@ import { isEscape } from '../utils/common';
 
 export default class NewPointPresenter {
   #pointListContainer = null;
-  #handleDataChange = null;
-  #handleDestroy = null;
+  #dataChangeHandler = null;
+  #destroyHandler = null;
   #pointEditComponent = null;
   #pointModel = null;
-  #point = [];
+  #points = [];
 
   constructor({pointListContainer, pointModel, onDataChange, onDestroy}) {
     this.#pointListContainer = pointListContainer;
-    this.#handleDataChange = onDataChange;
-    this.#handleDestroy = onDestroy;
+    this.#dataChangeHandler = onDataChange;
+    this.#destroyHandler = onDestroy;
     this.#pointModel = pointModel;
-    this.#point = DEFAULT_POINT;
+    this.#points = DEFAULT_POINT;
   }
 
   init() {
@@ -25,11 +25,11 @@ export default class NewPointPresenter {
     }
 
     this.#pointEditComponent = new EditPointView({
-      point: this.#point,
+      point: this.#points,
       offers: this.#pointModel.offers,
       destinations: this.#pointModel.destinations,
-      onFormSubmit: this.#handleFormSubmit,
-      onDeleteClick: this.#handleDeleteClick,
+      onFormSubmit: this.#formSubmitHandler,
+      onDeleteClick: this.#deleteClickHandler,
     });
 
     render(this.#pointEditComponent, this.#pointListContainer, RenderPosition.AFTERBEGIN);
@@ -42,7 +42,7 @@ export default class NewPointPresenter {
       return;
     }
 
-    this.#handleDestroy();
+    this.#destroyHandler();
 
     remove(this.#pointEditComponent);
     this.#pointEditComponent = null;
@@ -73,15 +73,15 @@ export default class NewPointPresenter {
     this.#pointEditComponent.shake(resetFormState);
   }
 
-  #handleFormSubmit = (point) => {
-    this.#handleDataChange(
+  #formSubmitHandler = (point) => {
+    this.#dataChangeHandler(
       UserAction.ADD_POINT,
       UpdateType.MINOR,
       point,
     );
   };
 
-  #handleDeleteClick = () => {
+  #deleteClickHandler = () => {
     this.destroy();
   };
 

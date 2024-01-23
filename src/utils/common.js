@@ -30,7 +30,7 @@ function getElementById(elements, itemsId) {
 
 const isEscape = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 
-const sortByPrice = (a, b) => b.basePrice - a.basePrice;
+const sortByPrice = (pointFirst, pointSecond) => pointSecond.basePrice - pointFirst.basePrice;
 
 export {
   capitalize,
